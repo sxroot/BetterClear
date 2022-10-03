@@ -1,0 +1,10 @@
+name: BetterClear
+version: '${version}'
+main: gg.fullwin.betterclear.BetterClear
+api-version: 1.18
+authors: [ brawn ]
+description: essentials sucks
+website: fullwin.gg
+commands:
+  clear:
+    permission: "fullwin.clear"
