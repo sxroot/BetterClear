@@ -1,6 +1,7 @@
 package gg.fullwin.betterclear.listener;
 
 import gg.fullwin.betterclear.BetterClear;
+import gg.fullwin.betterclear.stats.StatsRegistry;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -14,8 +15,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-public class SpeedKill implements Listener {
-
+public final class LotsOfListeners implements Listener {
     @EventHandler
     public void speedKill(PlayerDeathEvent e) {
         Player player = e.getEntity();
