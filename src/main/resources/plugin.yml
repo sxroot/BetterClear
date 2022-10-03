@@ -8,3 +8,5 @@ website: fullwin.gg
 commands:
   clear:
     permission: "fullwin.clear"
+  speed:
+    permission: "fullwin.speed"
