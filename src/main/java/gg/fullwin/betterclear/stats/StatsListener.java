@@ -12,8 +12,8 @@ import java.util.Optional;
 public record StatsListener(@NotNull StatsRegistry statsRegistry) implements Listener {
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
-        statsRegistry.findByUid(event.getPlayer().getUniqueId())
-                .ifPresentOrElse(stats -> {}, () -> statsRegistry.register(event.getPlayer()));
+        System.out.println(statsRegistry.findByUid(event.getPlayer().getUniqueId())
+                .orElseGet(() -> statsRegistry.register(event.getPlayer())));
     }
 
     @EventHandler
@@ -24,9 +24,16 @@ public record StatsListener(@NotNull StatsRegistry statsRegistry) implements Lis
     @EventHandler
     public void onPlayerDeath(PlayerDeathEvent event) {
         statsRegistry.findByUid(event.getEntity().getUniqueId())
-                .ifPresent(Stats::handleDeath);
+                .ifPresent(stats -> {
+                    stats.handleDeath();
+                    System.out.println(stats);
+                });
+
         Optional.ofNullable(event.getEntity().getKiller())
                 .flatMap(killer -> statsRegistry.findByUid(killer.getUniqueId()))
-                .ifPresent(Stats::handleKill);
+                .ifPresent(stats -> {
+                    stats.handleKill();
+                    System.out.println(stats);
+                });
     }
 }

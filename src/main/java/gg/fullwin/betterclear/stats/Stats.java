@@ -1,10 +1,12 @@
 package gg.fullwin.betterclear.stats;
 
 import com.mongodb.client.model.ReplaceOptions;
+import gg.fullwin.betterclear.BetterClear;
 import gg.fullwin.betterclear.mongo.MongoDatabase;
 import org.bson.Document;
 import org.jetbrains.annotations.NotNull;
 
+import java.text.DecimalFormat;
 import java.util.UUID;
 
 import static com.mongodb.client.model.Filters.eq;
@@ -65,7 +67,7 @@ public final class Stats {
     }
 
     public double kdr() {
-        return (double) kills / deaths == 0 ? 1 : deaths;
+        return Math.round(((double) kills / (double) Math.max(deaths, 1)) * 100D) / 100D;
     }
 
     public void handleKill() {
@@ -94,5 +96,16 @@ public final class Stats {
         return new Stats(UUID.fromString(document.getString("uid")), document.getInteger("kills"),
                 document.getInteger("deaths"), document.getInteger("killstreak"),
                 document.getInteger("maxstreak"));
+    }
+
+    @Override
+    public String toString() {
+        return "Stats{" +
+                "uid=" + uid +
+                ", kills=" + kills +
+                ", deaths=" + deaths +
+                ", killstreak=" + killstreak +
+                ", maxstreak=" + maxstreak +
+                '}';
     }
 }

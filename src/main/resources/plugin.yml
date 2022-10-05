@@ -10,3 +10,5 @@ commands:
     permission: "fullwin.clear"
   speed:
     permission: "fullwin.speed"
+  stats:
+    description: "YOUR MUM"

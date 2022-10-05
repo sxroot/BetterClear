@@ -16,12 +16,14 @@ public final class StatsRegistry {
     private final @NotNull Map<UUID, Stats> statsMap = new HashMap<>();
 
     public StatsRegistry() {
-        Executors.newSingleThreadScheduledExecutor().scheduleAtFixedRate(this::save, 5L, 5L, TimeUnit.SECONDS);
         load();
+        Executors.newSingleThreadScheduledExecutor().scheduleAtFixedRate(this::save, 5L, 5L, TimeUnit.SECONDS);
     }
 
-    public void register(@NotNull Player player) {
-        statsMap.put(player.getUniqueId(), new Stats(player.getUniqueId()));
+    public @NotNull Stats register(@NotNull Player player) {
+        Stats stats = new Stats(player.getUniqueId());
+        statsMap.put(player.getUniqueId(), stats);
+        return stats;
     }
 
     public @NotNull Optional<Stats> findByUid(@NotNull UUID uid) {

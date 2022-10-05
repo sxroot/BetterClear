@@ -20,16 +20,17 @@ public final class LotsOfListeners implements Listener {
     public void speedKill(PlayerDeathEvent e) {
         Player player = e.getEntity();
         Player killer = player.getKiller();
-        assert killer != null;
-        if (killer.hasMetadata("blacklivesmatter")) {
-            killer.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 40*20, 1));
+        e.setDeathMessage(ChatColor.WHITE + player.getName() + ChatColor.GRAY + " died.");
+
+        if (killer != null) {
+            if (killer.hasMetadata("blacklivesmatter")) killer.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 40 * 20, 1));
+            e.setDeathMessage(ChatColor.WHITE + killer.getName() +
+                    ChatColor.GRAY + " killed " + ChatColor.WHITE + player.getName()
+                    + ChatColor.GRAY + " with " + ChatColor.RED + Math.round(killer.getHealth() / 2) + " \u2764");
+            killer.setHealth(20);
         }
         player.removeMetadata("blacklivesmatter", JavaPlugin.getPlugin(BetterClear.class));
         e.getDrops().clear();
-        e.setDeathMessage(ChatColor.WHITE + killer.getName() +
-                ChatColor.GRAY + " killed " + ChatColor.WHITE + player.getName()
-                + ChatColor.GRAY + " with " + ChatColor.RED + Math.round(killer.getHealth() / 2) + " \u2764");
-        killer.setHealth(20);
     }
 
     @EventHandler
