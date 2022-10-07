@@ -1,7 +1,6 @@
 package gg.fullwin.betterclear.listener;
 
 import gg.fullwin.betterclear.BetterClear;
-import gg.fullwin.betterclear.stats.StatsRegistry;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
