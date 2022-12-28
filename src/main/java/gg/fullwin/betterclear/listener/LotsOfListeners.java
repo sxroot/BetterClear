@@ -5,10 +5,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityDropItemEvent;
-import org.bukkit.event.entity.EntityPickupItemEvent;
-import org.bukkit.event.entity.FoodLevelChangeEvent;
-import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.entity.*;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
@@ -23,12 +20,14 @@ public final class LotsOfListeners implements Listener {
 
         if (killer != null) {
             if (killer.hasMetadata("blacklivesmatter")) killer.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 40 * 20, 1));
+            if (killer.hasMetadata("alllivesmatter")) killer.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 40 * 20, 0));
             e.setDeathMessage(ChatColor.WHITE + killer.getName() +
                     ChatColor.GRAY + " killed " + ChatColor.WHITE + player.getName()
                     + ChatColor.GRAY + " with " + ChatColor.RED + Math.round(killer.getHealth() / 2) + " \u2764");
             killer.setHealth(20);
         }
         player.removeMetadata("blacklivesmatter", JavaPlugin.getPlugin(BetterClear.class));
+        player.removeMetadata("alllivesmatter", JavaPlugin.getPlugin(BetterClear.class));
         e.getDrops().clear();
     }
 
@@ -51,4 +50,5 @@ public final class LotsOfListeners implements Listener {
     public void d(FoodLevelChangeEvent e) {
         e.setCancelled(true);
     }
+
 }

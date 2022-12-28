@@ -1,4 +1,4 @@
-package gg.fullwin.betterclear.command;
+package gg.fullwin.betterclear.command.effects;
 
 import gg.fullwin.betterclear.BetterClear;
 import org.bukkit.Bukkit;
@@ -25,7 +25,7 @@ public final class SpeedCommand implements CommandExecutor {
             return true;
         }
         player.setMetadata("blacklivesmatter", new FixedMetadataValue(JavaPlugin.getPlugin(BetterClear.class), "gamer"));
-        player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 40*20, 1));
+        player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 40 * 20, 1));
         return true;
     }
 }

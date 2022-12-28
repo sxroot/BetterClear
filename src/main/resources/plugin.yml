@@ -10,5 +10,9 @@ commands:
     permission: "fullwin.clear"
   speed:
     permission: "fullwin.speed"
+  strength:
+    permission: "fullwin.strength"
   stats:
     description: "YOUR MUM"
+  kit:
+    description: "YOUR DAD"
