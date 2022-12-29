@@ -1,10 +1,8 @@
 package gg.fullwin.betterclear;
 
-import gg.fullwin.betterclear.command.kits.*;
-import gg.fullwin.betterclear.command.misc.ClearCommand;
-import gg.fullwin.betterclear.command.effects.SpeedCommand;
-import gg.fullwin.betterclear.command.effects.StrengthCommand;
-import gg.fullwin.betterclear.command.misc.TPKitSelectCommand;
+import gg.fullwin.betterclear.misc.*;
+import gg.fullwin.betterclear.kits.Kit;
+import gg.fullwin.betterclear.kits.commands.*;
 import gg.fullwin.betterclear.listener.LotsOfListeners;
 import gg.fullwin.betterclear.mongo.MongoDatabase;
 import gg.fullwin.betterclear.stats.*;
@@ -37,14 +35,11 @@ public final class BetterClear extends JavaPlugin {
         Objects.requireNonNull(getCommand("clear")).setExecutor(new ClearCommand());
         Objects.requireNonNull(getCommand("speed")).setExecutor(new SpeedCommand());
         Objects.requireNonNull(getCommand("strength")).setExecutor(new StrengthCommand());
-        //Objects.requireNonNull(getCommand("kit")).setExecutor(new KitCommand());
         Objects.requireNonNull(getCommand("tpkits")).setExecutor(new TPKitSelectCommand());
+        Objects.requireNonNull(getCommand("build")).setExecutor(new BuildCommand());
 
         // kit commnds
-        Objects.requireNonNull(getCommand("kit create")).setExecutor(new KitCreateCommand());
-        Objects.requireNonNull(getCommand("kit delete")).setExecutor(new KitDeleteCommand());
-        Objects.requireNonNull(getCommand("kit getinv")).setExecutor(new KitGetInvCommand());
-        Objects.requireNonNull(getCommand("kit setinv")).setExecutor(new KitSetInvCommand());
+        Objects.requireNonNull(getCommand("kit")).setExecutor(new KitCommand());
 
         // register listeners
         Objects.requireNonNull(getCommand("stats")).setExecutor(new StatsCommand(statsRegistry));
