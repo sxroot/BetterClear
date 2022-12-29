@@ -98,7 +98,9 @@ public final class KitCommand implements CommandExecutor {
                 target.getInventory().setContents(kit.loadout());
                 target.getInventory().setArmorContents(kit.armourLoadout());
                 target.updateInventory();
-                sender.sendMessage(CC.translate("&6Given &e" + target.getName() + "&6 kit &e" + kit.getName() + "&6."));
+                if (sender instanceof Player) {
+                    sender.sendMessage(CC.translate("&6Given &e" + target.getName() + "&6 kit &e" + kit.getName() + "&6."));
+                }
                 return true;
             }
             case "set" -> {

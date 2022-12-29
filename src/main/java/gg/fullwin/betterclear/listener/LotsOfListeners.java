@@ -87,11 +87,7 @@ public final class LotsOfListeners implements Listener {
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void onInteract(PlayerInteractEvent e) {
-        if (e.getItem() == null || e.getClickedBlock() == null) {
-            return;
-        }
-
+    public void onRefillSign(PlayerInteractEvent e) {
         if (e.getAction() == Action.RIGHT_CLICK_BLOCK) {
             if (e.getClickedBlock() instanceof Sign sign) {
                 Inventory inventory = Bukkit.createInventory(null, 27, "Refill");
@@ -103,19 +99,26 @@ public final class LotsOfListeners implements Listener {
                 for (int i = 0; i < 27; i++) inventory.addItem(potion);
                 e.getPlayer().openInventory(inventory);
             }
+        }
+    }
 
-            if (e.getItem().getType() == Material.PAINTING) {
-                if (e.getPlayer().getGameMode() != GameMode.CREATIVE) {
-                    if (!e.getPlayer().hasMetadata("ibebuildinghere"))
-                        e.setCancelled(true);
-                }
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void onInteract(PlayerInteractEvent e) {
+        if (e.getItem() == null || e.getClickedBlock() == null) {
+            return;
+        }
+
+        if (e.getItem().getType() == Material.PAINTING) {
+            if (e.getPlayer().getGameMode() != GameMode.CREATIVE) {
+                if (!e.getPlayer().hasMetadata("ibebuildinghere"))
+                    e.setCancelled(true);
             }
+        }
 
-            if (e.getClickedBlock().getState() instanceof ItemFrame) {
-                if (e.getPlayer().getGameMode() != GameMode.CREATIVE) {
-                    if (!e.getPlayer().hasMetadata("ibebuildinghere"))
-                        e.setCancelled(true);
-                }
+        if (e.getClickedBlock().getState() instanceof ItemFrame) {
+            if (e.getPlayer().getGameMode() != GameMode.CREATIVE) {
+                if (!e.getPlayer().hasMetadata("ibebuildinghere"))
+                    e.setCancelled(true);
             }
         }
     }
