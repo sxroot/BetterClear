@@ -23,29 +23,12 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 public final class LotsOfListeners implements Listener {
-
-    private static String center(String ln) {
-        StringBuilder whiteSpace = new StringBuilder();
-        String trimmed = ln.trim();
-        int charTotal = trimmed.length();
-        final String trunc;
-        if (charTotal >= 60) trunc = trimmed.substring(0, 60);
-        else trunc = trimmed;
-        int diff = 60 - charTotal;
-        int half = diff / 2;
-        int i = 1;
-        while (i <= half) { i++; whiteSpace.append(" "); }
-        StringBuilder out = new StringBuilder(whiteSpace + trunc + whiteSpace);
-        while (out.length() < 62) out.append(" ");
-        return out.toString();
-    }
-
     @EventHandler(priority = EventPriority.HIGHEST)
     public void lolMOTD(ServerListPingEvent e) {
         final String line1 = "\u00A76\u00A7lᴋɪᴛᴘᴠᴘ \u00A7eᴇᴜ \u00A7r\u00A77[1.16 - 1.19]";
         final String line2 = "ᴛʜɪs ɪs ᴀ ᴇxᴀᴍᴘʟᴇ ᴍᴏᴛᴅ";
 
-        e.setMotd(line1 + line2);
+        e.setMotd(line1 + "\n" + line2);
         e.setMaxPlayers(100);
     }
 
