@@ -75,9 +75,8 @@ public final class LotsOfListeners implements Listener {
         e.setQuitMessage(null);
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @EventHandler
     public void onPlayerChat(AsyncPlayerChatEvent e) {
-        e.setCancelled(false);
         e.setFormat("<" + UnicodeUtil.parse(e.getPlayer().getName()) + "> " + UnicodeUtil.parse(e.getMessage()));
     }
 
