@@ -75,13 +75,13 @@ public final class LotsOfListeners implements Listener {
         e.setQuitMessage(null);
     }
 
-    @EventHandler
+/*    @EventHandler
     public void onPlayerChat(AsyncPlayerChatEvent e) {
-        e.setFormat("<" + UnicodeUtil.parse(e.getPlayer().getName()) + "> " + UnicodeUtil.parse(e.getMessage()));
-    }
+        e.setFormat("<" + UnicodeUtil.parse(e.getPlayer().getName()) + "> " + e.getMessage());
+    }*/
 
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void onVariousDoors(PlayerInteractEvent e) {
+    public void onEpicStuff(PlayerInteractEvent e) {
         if (e.getAction() == Action.RIGHT_CLICK_BLOCK) {
             //System.out.println("RIGHT CLICKED A BLOCK!");
             if (e.getClickedBlock() != null && e.getClickedBlock().getType().name().endsWith("DOOR")) {
@@ -91,17 +91,14 @@ public final class LotsOfListeners implements Listener {
                 }
             }
         }
-    }
 
-    @EventHandler(priority = EventPriority.HIGHEST)
-    public void onRefillSign(PlayerInteractEvent e) {
         if (e.getAction() == Action.RIGHT_CLICK_BLOCK) {
-            if (e.getClickedBlock() instanceof Sign sign) {
+            if (e.getClickedBlock() != null && e.getClickedBlock().getType().name().endsWith("SIGN")) {
                 Inventory inventory = Bukkit.createInventory(null, 27, "Refill");
                 ItemStack potion = new ItemStack(Material.SPLASH_POTION);
                 PotionMeta potionMeta = ((PotionMeta) potion.getItemMeta());
                 assert potionMeta != null;
-                potionMeta.setBasePotionData(new PotionData(PotionType.INSTANT_HEAL, true, false));
+                potionMeta.setBasePotionData(new PotionData(PotionType.INSTANT_HEAL, false, true));
                 potion.setItemMeta(potionMeta);
                 for (int i = 0; i < 27; i++) inventory.addItem(potion);
                 e.getPlayer().openInventory(inventory);
