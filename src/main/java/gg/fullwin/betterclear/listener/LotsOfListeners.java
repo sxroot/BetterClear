@@ -3,10 +3,12 @@ package gg.fullwin.betterclear.listener;
 import gg.fullwin.betterclear.BetterClear;
 import gg.fullwin.betterclear.util.CC;
 import org.bukkit.*;
-import org.bukkit.block.Sign;
-import org.bukkit.block.data.type.TrapDoor;
-import org.bukkit.entity.ItemFrame;
+import net.md_5.bungee.api.ChatMessageType;
+import net.md_5.bungee.api.chat.TextComponent;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.block.Sign;
+import org.bukkit.entity.ItemFrame;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -19,7 +21,6 @@ import org.bukkit.event.server.ServerListPingEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.PotionMeta;
-import org.bukkit.material.MaterialData;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionData;
 import org.bukkit.potion.PotionEffect;
@@ -47,9 +48,9 @@ public final class LotsOfListeners implements Listener {
                 killer.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 40 * 20, 1));
             if (killer.hasMetadata("alllivesmatter"))
                 killer.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 40 * 20, 0));
-            e.setDeathMessage(ChatColor.WHITE + killer.getName() +
-                    ChatColor.GRAY + " killed " + ChatColor.WHITE + player.getName()
-                    + ChatColor.GRAY + " with " + ChatColor.RED + Math.round(killer.getHealth() / 2) + " \u2764");
+            e.setDeathMessage(ChatColor.WHITE + killer.getName() + ChatColor.GRAY + " killed " + ChatColor.WHITE + player.getName() + ChatColor.GRAY + " with " + ChatColor.RED + Math.round(killer.getHealth() / 2) + " \u2764");
+            String message = CC.translate("&cʀᴇᴄᴇɪᴠᴇᴅ ᴀ ʜᴇᴀʟ ꜰᴏʀ ᴋɪʟʟɪɴɢ ᴘʟᴀʏᴇʀ");
+            killer.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(message));
             killer.setHealth(20);
         }
         player.removeMetadata("blacklivesmatter", JavaPlugin.getPlugin(BetterClear.class));
