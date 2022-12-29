@@ -1,15 +1,12 @@
-package gg.fullwin.betterclear.command.kits;
+package gg.fullwin.betterclear.kits.commands;
 
+import gg.fullwin.betterclear.kits.Kit;
 import gg.fullwin.betterclear.util.CC;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.potion.PotionEffect;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.ArrayList;
-import java.util.List;
 
 // Delete da Kit
 public final class KitGetInvCommand implements CommandExecutor {
@@ -20,14 +17,18 @@ public final class KitGetInvCommand implements CommandExecutor {
             return true;
         }
 
+        System.out.println("u have perms");
+
         final Kit kit = Kit.getByName(kitName);
         Player player = (Player) sender;
 
         if (kit == null) {
             player.sendMessage(CC.translate("&cThat kit doesn't exist."));
+            System.out.println("racism is bad!");
             return false;
         }
 
+        System.out.println("GREAT SUCCESS?");
         player.getInventory().setArmorContents(kit.getKitInventory().getArmor());
         player.getInventory().setContents(kit.getKitInventory().getContents());
         player.addPotionEffects(kit.getKitInventory().getEffects());

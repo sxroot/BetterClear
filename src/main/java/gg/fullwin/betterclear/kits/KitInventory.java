@@ -1,4 +1,4 @@
-package gg.fullwin.betterclear.command.kits;
+package gg.fullwin.betterclear.kits;
 
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;

@@ -115,24 +115,6 @@ public class InventoryUtil {
             }
         }
 
-//		if (item.getType() == Material.POTION) {
-//			Potion potion = Potion.fromItemStack(item);
-//
-//			builder.append(":pd@")
-//			       .append(potion.getType().getDamageValue())
-//			       .append("-")
-//			       .append(potion.getLevel());
-//
-//			for (PotionEffect effect : potion.getEffects()) {
-//				builder.append("=")
-//				       .append(effect.getType().getId())
-//				       .append("-")
-//				       .append(effect.getDuration())
-//				       .append("-")
-//				       .append(effect.getAmplifier());
-//			}
-//		}
-
         return builder.toString();
     }
 
@@ -213,34 +195,6 @@ public class InventoryUtil {
 
                     break;
                 }
-//				case "pd": {
-//					if (item != null && item.getType() == Material.POTION) {
-//						String[] effectsList = itemAttribute[1].split("=");
-//						String[] potionData = effectsList[0].split("-");
-//
-//						Potion potion = new Potion(PotionType.getByDamageValue(Integer.valueOf(potionData[0])),
-//								Integer.valueOf(potionData[1]));
-//						potion.setSplash(item.getDurability() >= 16000);
-//
-//						PotionMeta potionMeta = (PotionMeta) item.getItemMeta();
-//
-//						for (int i = 1; i < effectsList.length; i++) {
-//							String[] effectData = effectsList[1].split("-");
-//
-//							PotionEffect potionEffect = new PotionEffect(PotionEffectType.getById(
-//									Integer.valueOf(effectData[0])), Double.valueOf(effectData[1]).intValue(),
-//									Integer.valueOf(effectData[2]), false
-//							);
-//
-//							potionMeta.addCustomEffect(potionEffect, true);
-//						}
-//
-//						item = potion.toItemStack(item.getAmount());
-//						item.setItemMeta(potionMeta);
-//					}
-//
-//					break;
-//				}
             }
         }
 

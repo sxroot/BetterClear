@@ -1,7 +1,7 @@
-package gg.fullwin.betterclear.command.kits;
+package gg.fullwin.betterclear.kits.commands;
 
+import gg.fullwin.betterclear.kits.Kit;
 import gg.fullwin.betterclear.util.CC;
-import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;

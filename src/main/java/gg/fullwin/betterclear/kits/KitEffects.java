@@ -1,4 +1,4 @@
-package gg.fullwin.betterclear.command.kits;
+package gg.fullwin.betterclear.kits;
 
 // Kit Effects
 public class KitEffects {

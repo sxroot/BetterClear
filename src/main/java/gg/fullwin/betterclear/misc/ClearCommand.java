@@ -1,4 +1,4 @@
-package gg.fullwin.betterclear.command.misc;
+package gg.fullwin.betterclear.misc;
 
 import gg.fullwin.betterclear.BetterClear;
 import org.bukkit.Bukkit;

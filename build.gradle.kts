@@ -8,6 +8,7 @@ version = "1.0-SNAPSHOT"
 
 repositories {
     mavenCentral()
+    maven("https://jitpack.io")
     maven("https://hub.spigotmc.org/nexus/content/repositories/snapshots/")
     maven("https://oss.sonatype.org/content/groups/public/")
     maven("https://repo.extendedclip.com/content/repositories/placeholderapi/")
@@ -18,6 +19,8 @@ dependencies {
     compileOnly("me.clip:placeholderapi:2.11.1")
     implementation("org.mongodb:mongo-java-driver:3.12.11")
     implementation("org.jetbrains:annotations:23.0.0")
+
+    implementation("com.github.Revxrsal:Lamp:Tag")
 }
 
 tasks {
