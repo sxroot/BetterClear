@@ -2,6 +2,7 @@ package gg.fullwin.betterclear.kits.commands;
 
 import gg.fullwin.betterclear.kits.Kit;
 import gg.fullwin.betterclear.util.CC;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -24,8 +25,8 @@ public final class KitCommand implements CommandExecutor {
                     " /kits " + ChatColor.YELLOW + "Display all available kits",
                     " /kit create " + ChatColor.YELLOW + "Create a kit",
                     " /kit delete " + ChatColor.YELLOW + "Delete a kit",
-                    " /kit edit " + ChatColor.YELLOW + "Edit a kit",
-                    " /kit effects " + ChatColor.YELLOW + "Add effects for the kit",
+                    " /kit give " + ChatColor.YELLOW + "Give a kit",
+                    " /kit set " + ChatColor.YELLOW + "Edit a kit",
                     ""
             );
             return true;
@@ -53,7 +54,7 @@ public final class KitCommand implements CommandExecutor {
                 Kit kit = new Kit(args[1], player.getInventory());
                 kit.save();
                 Kit.getKits().add(kit);
-                player.sendMessage(CC.translate("&6Created a new kit &e" + kit.getName() + "&6."));
+                player.sendMessage(CC.translate("&6Created &e" + kit.getName() + "&6."));
                 return true;
             }
 
@@ -72,13 +73,22 @@ public final class KitCommand implements CommandExecutor {
 
                 kit.delete();
                 Kit.getKits().forEach(Kit::save);
-                player.sendMessage(CC.translate("&6Removed the kit &e" + kit.getName() + "&6."));
+                player.sendMessage(CC.translate("&6Removed &e" + kit.getName() + "&6."));
                 return true;
             }
-            case "getinv" -> {
-                if (args.length != 2) {
-                    player.sendMessage(CC.translate("&c/kit getinv <name>"));
+            case "give" -> {
+                Player target = player;
+                if (args.length < 2) {
+                    player.sendMessage(CC.translate("&c/kit give <name> [player]"));
                     return true;
+                }
+
+                if (args.length == 3) {
+                    target = Bukkit.getPlayer(args[2]);
+                    if (target == null) {
+                        player.sendMessage(CC.translate("&cThat player is offline."));
+                        return true;
+                    }
                 }
 
                 Kit kit = Kit.getByName(args[1]);
@@ -88,15 +98,15 @@ public final class KitCommand implements CommandExecutor {
                     return false;
                 }
 
-                player.getInventory().setContents(kit.loadout());
-                player.getInventory().setArmorContents(kit.armourLoadout());
-                player.updateInventory();
-                player.sendMessage(CC.translate("&6You received the kit's inventory."));
+                target.getInventory().setContents(kit.loadout());
+                target.getInventory().setArmorContents(kit.armourLoadout());
+                target.updateInventory();
+                player.sendMessage(CC.translate("&6Given &e" + target.getName() + "&6 kit &e" + kit.getName() + "&6."));
                 return true;
             }
-            case "setinv" -> {
+            case "set" -> {
                 if (args.length != 2) {
-                    player.sendMessage(CC.translate("&c/kit setinv <name>"));
+                    player.sendMessage(CC.translate("&c/kit set <name>"));
                     return true;
                 }
 
@@ -109,7 +119,7 @@ public final class KitCommand implements CommandExecutor {
 
                 kit.loadout(player.getInventory());
                 kit.save();
-                player.sendMessage((CC.translate("&6Updated kit's loadout.")));
+                player.sendMessage((CC.translate("&6Updated &e" + kit.getName() + "'s &6loadout.")));
                 return true;
             }
         }

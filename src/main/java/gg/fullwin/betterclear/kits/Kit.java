@@ -20,18 +20,16 @@ public final class Kit {
     private @NotNull String name;
     private final @NotNull List<ItemStack> loadout = new ArrayList<>();
     private final @NotNull List<ItemStack> armourLoadout = new ArrayList<>();
-    private @NotNull KitEffects kitEffects = new KitEffects();
 
     public Kit(@NotNull String name, @NotNull PlayerInventory inventory) {
         this.name = name;
         loadout(inventory);
     }
 
-    public Kit(@NotNull String name, @NotNull ItemStack[] loadout, @NotNull ItemStack[] armourLoadout, @NotNull KitEffects kitEffects) {
+    public Kit(@NotNull String name, @NotNull ItemStack[] loadout, @NotNull ItemStack[] armourLoadout) {
         this.name = name;
         for (ItemStack itemStack : loadout) this.loadout.add(itemStack.clone());
         for (ItemStack itemStack : armourLoadout) this.armourLoadout.add(itemStack.clone());
-        this.kitEffects = kitEffects;
     }
 
     public @NotNull String getName() {
@@ -81,7 +79,6 @@ public final class Kit {
 
         config.getConfiguration().set(path + ".contents", ItemStackBase64.base64(loadout.toArray(new ItemStack[0])));
         config.getConfiguration().set(path + ".armor", ItemStackBase64.base64(armourLoadout.toArray(new ItemStack[0])));
-        config.getConfiguration().set(path + ".effects", KitEffects.serialize(kitEffects));
 
         try {
             config.getConfiguration().save(config.getFile());
@@ -96,8 +93,7 @@ public final class Kit {
             kits.add(new Kit(
                     key,
                     ItemStackBase64.itemStackArray(config.getString(key + ".contents")),
-                    ItemStackBase64.itemStackArray(config.getString(key + ".armor")),
-                    KitEffects.from(config.getString(key + ".effects"))
+                    ItemStackBase64.itemStackArray(config.getString(key + ".armor"))
             ));
     }
 
@@ -116,7 +112,6 @@ public final class Kit {
                 "name='" + name + '\'' +
                 ", loadout=" + loadout +
                 ", armourLoadout=" + armourLoadout +
-                ", kitEffects=" + kitEffects +
                 '}';
     }
 }
