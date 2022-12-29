@@ -35,7 +35,7 @@ public final class LotsOfListeners implements Listener {
         final String line2 = "» ᴋɪᴛᴘᴠᴘ ᴅᴇᴠᴇʟᴏᴘᴍᴇɴᴛ sᴇʀᴠᴇʀ";
 
         e.setMotd(line1 + "\n" + line2);
-        e.setMaxPlayers(100);
+        e.setMaxPlayers(1);
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
