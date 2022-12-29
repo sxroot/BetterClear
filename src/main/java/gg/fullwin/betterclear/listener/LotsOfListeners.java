@@ -76,6 +76,12 @@ public final class LotsOfListeners implements Listener {
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
+    public void onPlayerChat(AsyncPlayerChatEvent e) {
+        e.setCancelled(false);
+        e.setFormat("<" + UnicodeUtil.parse(e.getPlayer().getName()) + "> " + UnicodeUtil.parse(e.getMessage()));
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onVariousDoors(PlayerInteractEvent e) {
         if (e.getAction() == Action.RIGHT_CLICK_BLOCK) {
             //System.out.println("RIGHT CLICKED A BLOCK!");
