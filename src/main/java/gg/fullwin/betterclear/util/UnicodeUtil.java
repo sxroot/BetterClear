@@ -22,7 +22,6 @@ public class UnicodeUtil {
                 .replace("G", "ɢ")
                 .replace("H", "ʜ")
                 .replace("J", "ᴊ")
-                .replace("K", "ᴊ")
                 .replace("K", "ᴋ")
                 .replace("L", "ʟ")
                 .replace("Z", "ᴢ")

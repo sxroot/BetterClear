@@ -31,7 +31,7 @@ import org.bukkit.potion.PotionType;
 public final class LotsOfListeners implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void lolMOTD(ServerListPingEvent e) {
-        final String line1 = "\u00A76\u00A7lꜰᴜʟʟᴡɪɴ \u00A7eᴇᴜ \u00A7r\u00A77[1.16 - 1.19]";
+        final String line1 = "\u00A76\u00A7lꜰᴜʟʟᴡɪɴ \u00A7eᴇᴜ \u00A7f\u00A7k: \u00A7r\u00A77[1.16 - 1.19]";
         final String line2 = "» ᴋɪᴛᴘᴠᴘ ᴅᴇᴠᴇʟᴏᴘᴍᴇɴᴛ sᴇʀᴠᴇʀ";
 
         e.setMotd(line1 + "\n" + line2);
