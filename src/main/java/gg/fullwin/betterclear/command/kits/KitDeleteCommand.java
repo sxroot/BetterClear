@@ -1,5 +1,7 @@
 package gg.fullwin.betterclear.command.kits;
 
+import gg.fullwin.betterclear.util.CC;
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -8,23 +10,25 @@ import org.bukkit.entity.Player;
 // Delete da Kit
 public final class KitDeleteCommand implements CommandExecutor {
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (!sender.hasPermission("fullwin.kit")) {
+    public boolean onCommand(CommandSender sender, Command command, String kitName, String[] args) {
+        if (!sender.hasPermission("fullwin.kit.delete")) {
             sender.sendMessage("Unknown command. Type \"/help\" for help.");
             return true;
         }
 
-        Player player = (Player) sender;
-        player.sendMessage(
-                "" +
-                "&6&lKit Commands:" +
-                " &f/kits &7- &eDisplay all avaliable kits" +
-                " &f/kit create &7- &eCreate a kit" +
-                " &f/kit delete &7- &eDelete a kit" +
-                " &f/kit edit &7- &eEdit a kit" +
-                " &f/kit effects &7- &eAdd effects for the kit" +
-                ""
-        );
+        if (kitName == null) {
+            sender.sendMessage(CC.translate("&cYou have to provide a name."));
+            return false;
+        }
+
+        final Kit kit = Kit.getByName(kitName);
+        if (kit != null) {
+            kit.delete();
+            Kit.getKits().forEach(Kit::save);
+            sender.sendMessage(CC.translate("&6Removed the kit &e" + kit.getName() + "&6."));
+            return true;
+        }
+
         return true;
     }
 }
