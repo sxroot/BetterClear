@@ -42,13 +42,12 @@ public final class LotsOfListeners implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void lolMOTD(ServerListPingEvent e) {
-        final String line1 = "\u00A76\u00A7lᴋɪᴛᴘᴠᴘ \u00A7eᴇᴜ \u00A7r\u00A77[1.19.2]";
+        final String line1 = "\u00A76\u00A7lᴋɪᴛᴘᴠᴘ \u00A7eᴇᴜ \u00A7r\u00A77[1.16 - 1.19]";
         final String line2 = "ᴛʜɪs ɪs ᴀ ᴇxᴀᴍᴘʟᴇ ᴍᴏᴛᴅ";
 
-        e.setMotd(center(line1) + center(line2));
+        e.setMotd(line1 + line2);
         e.setMaxPlayers(100);
     }
-
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void speedKill(PlayerDeathEvent e) {
