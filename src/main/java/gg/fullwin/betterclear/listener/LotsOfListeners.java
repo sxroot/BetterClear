@@ -77,7 +77,12 @@ public final class LotsOfListeners implements Listener {
     public void onVariousDoors(PlayerInteractEvent e) {
         if (e.getAction() == Action.RIGHT_CLICK_BLOCK) {
             //System.out.println("RIGHT CLICKED A BLOCK!");
-
+            if (e.getClickedBlock() != null && e.getClickedBlock().getType().name().endsWith("DOOR")) {
+                //System.out.println("OMG A DOOR?!");
+                if (!e.getPlayer().hasMetadata("ibebuildinghere")) {
+                    e.setCancelled(true);
+                }
+            }
         }
     }
 
@@ -99,9 +104,14 @@ public final class LotsOfListeners implements Listener {
                 e.getPlayer().openInventory(inventory);
             }
 
-            if (e.getItem().getType() == Material.PAINTING ||
-                    e.getClickedBlock().getType().name().endsWith("DOOR") ||
-                    e.getClickedBlock().getState() instanceof ItemFrame) {
+            if (e.getItem().getType() == Material.PAINTING) {
+                if (e.getPlayer().getGameMode() != GameMode.CREATIVE) {
+                    if (!e.getPlayer().hasMetadata("ibebuildinghere"))
+                        e.setCancelled(true);
+                }
+            }
+
+            if (e.getClickedBlock().getState() instanceof ItemFrame) {
                 if (e.getPlayer().getGameMode() != GameMode.CREATIVE) {
                     if (!e.getPlayer().hasMetadata("ibebuildinghere"))
                         e.setCancelled(true);
