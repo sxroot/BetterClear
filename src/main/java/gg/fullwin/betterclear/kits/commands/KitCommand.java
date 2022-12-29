@@ -32,6 +32,12 @@ public final class KitCommand implements CommandExecutor {
         }
 
         switch (args[0]) {
+            case "list" -> {
+                for (Kit kit : Kit.getKits()) {
+                    player.sendMessage(kit.toString());
+                }
+                return true;
+            }
             case "create" -> {
                 if (args.length != 2) {
                     player.sendMessage(CC.translate("&c/kit create <name>"));
@@ -82,8 +88,8 @@ public final class KitCommand implements CommandExecutor {
                     return false;
                 }
 
-                player.getInventory().setArmorContents(kit.armourLoadout());
                 player.getInventory().setContents(kit.loadout());
+                player.getInventory().setArmorContents(kit.armourLoadout());
                 player.updateInventory();
                 player.sendMessage(CC.translate("&6You received the kit's inventory."));
                 return true;
