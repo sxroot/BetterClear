@@ -5,6 +5,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.data.type.TrapDoor;
 import org.bukkit.entity.ItemFrame;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -42,6 +43,20 @@ public final class LotsOfListeners implements Listener {
         e.getDrops().clear();
     }
 
+    // Block all Interactions with Trapdoors & Doors.
+    @EventHandler
+    public void onVariousDoors(PlayerInteractEvent e) {
+        if (e.getAction() == Action.RIGHT_CLICK_BLOCK) {
+            //System.out.println("RIGHT CLICKED A BLOCK!");
+            if (e.getClickedBlock() != null && e.getClickedBlock().getType().name().endsWith("DOOR")) {
+                //System.out.println("OMG A DOOR?!");
+                if (!e.getPlayer().hasMetadata("ibebuildinghere")) {
+                    e.setCancelled(true);
+                }
+            }
+        }
+    }
+
     @EventHandler
     public void onInteract(PlayerInteractEvent e) {
         if (e.getItem() == null || e.getClickedBlock() == null) {
@@ -55,6 +70,7 @@ public final class LotsOfListeners implements Listener {
                         e.setCancelled(true);
                 }
             }
+        }
 
             if (e.getClickedBlock().getState() instanceof ItemFrame) {
                 if (e.getPlayer().getGameMode() != GameMode.CREATIVE) {
@@ -64,7 +80,6 @@ public final class LotsOfListeners implements Listener {
                 }
             }
         }
-    }
 
     // Anti-block Glitch apparently ¯\_(ツ)_/¯
     @EventHandler(priority = EventPriority.MONITOR)
