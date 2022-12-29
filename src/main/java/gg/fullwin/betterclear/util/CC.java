@@ -1,6 +1,5 @@
 package gg.fullwin.betterclear.util;
 
-import org.apache.commons.lang.StringUtils;
 import org.bukkit.ChatColor;
 
 import java.util.ArrayList;
@@ -31,7 +30,7 @@ public class CC {
     public static final String DARK_RED = ChatColor.DARK_RED.toString();
     public static final String PINK = ChatColor.LIGHT_PURPLE.toString();
     public static final String MENU_BAR = ChatColor.GRAY.toString() + ChatColor.STRIKETHROUGH.toString() + "------------------------";
-    public static final String CHAT_BAR = ChatColor.translateAlternateColorCodes('&', "&9&m--------&7&m" + StringUtils.repeat("-", 37) + "&9&m--------");
+    public static final String CHAT_BAR = ChatColor.translateAlternateColorCodes('&', "&9&m--------&7&m-------------------------------------&9&m--------");
     public static final String SB_BAR = ChatColor.GRAY.toString() + ChatColor.STRIKETHROUGH.toString() + "----------------------";
 
     public static String translate(String in) {
