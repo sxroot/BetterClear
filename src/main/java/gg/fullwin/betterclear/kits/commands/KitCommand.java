@@ -13,15 +13,13 @@ import org.jetbrains.annotations.NotNull;
 public final class KitCommand implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
-        if (!(sender instanceof Player player)) return true;
-
-        if (!player.hasPermission("fullwin.kit")) {
-            player.sendMessage("Unknown command. Type \"/help\" for help.");
+        if (!sender.hasPermission("fullwin.kit")) {
+            sender.sendMessage("Unknown command. Type \"/help\" for help.");
             return true;
         }
 
         if (args.length == 0) {
-            player.sendMessage(ChatColor.GOLD.toString() + ChatColor.BOLD + "Kit Commands:",
+            sender.sendMessage(ChatColor.GOLD.toString() + ChatColor.BOLD + "Kit Commands:",
                     " /kits " + ChatColor.YELLOW + "Display all available kits",
                     " /kit create " + ChatColor.YELLOW + "Create a kit",
                     " /kit delete " + ChatColor.YELLOW + "Delete a kit",
@@ -35,11 +33,12 @@ public final class KitCommand implements CommandExecutor {
         switch (args[0]) {
             case "list" -> {
                 for (Kit kit : Kit.getKits()) {
-                    player.sendMessage(kit.toString());
+                    sender.sendMessage(kit.toString());
                 }
                 return true;
             }
             case "create" -> {
+                if (!(sender instanceof Player player)) return true;
                 if (args.length != 2) {
                     player.sendMessage(CC.translate("&c/kit create <name>"));
                     return true;
@@ -60,51 +59,51 @@ public final class KitCommand implements CommandExecutor {
 
             case "delete" -> {
                 if (args.length != 2) {
-                    player.sendMessage(CC.translate("&c/kit delete <name>"));
+                    sender.sendMessage(CC.translate("&c/kit delete <name>"));
                     return true;
                 }
 
                 Kit kit = Kit.getByName(args[1]);
 
                 if (kit == null) {
-                    player.sendMessage(CC.translate("&cThat kit doesn't exist."));
+                    sender.sendMessage(CC.translate("&cThat kit doesn't exist."));
                     return true;
                 }
 
                 kit.delete();
                 Kit.getKits().forEach(Kit::save);
-                player.sendMessage(CC.translate("&6Removed &e" + kit.getName() + "&6."));
+                sender.sendMessage(CC.translate("&6Removed &e" + kit.getName() + "&6."));
                 return true;
             }
             case "give" -> {
-                Player target = player;
+                Player target = sender instanceof Player player ? player : null;
                 if (args.length < 2) {
-                    player.sendMessage(CC.translate("&c/kit give <name> [player]"));
+                    sender.sendMessage(CC.translate("&c/kit give <name> [player]"));
                     return true;
                 }
 
-                if (args.length == 3) {
-                    target = Bukkit.getPlayer(args[2]);
-                    if (target == null) {
-                        player.sendMessage(CC.translate("&cThat player is offline."));
-                        return true;
-                    }
+                if (args.length == 3) target = Bukkit.getPlayer(args[2]);
+
+                if (target == null) {
+                    sender.sendMessage(CC.translate("&cThat player is offline."));
+                    return true;
                 }
 
                 Kit kit = Kit.getByName(args[1]);
 
                 if (kit == null) {
-                    player.sendMessage(CC.translate("&cThat kit doesn't exist."));
+                    sender.sendMessage(CC.translate("&cThat kit doesn't exist."));
                     return false;
                 }
 
                 target.getInventory().setContents(kit.loadout());
                 target.getInventory().setArmorContents(kit.armourLoadout());
                 target.updateInventory();
-                player.sendMessage(CC.translate("&6Given &e" + target.getName() + "&6 kit &e" + kit.getName() + "&6."));
+                sender.sendMessage(CC.translate("&6Given &e" + target.getName() + "&6 kit &e" + kit.getName() + "&6."));
                 return true;
             }
             case "set" -> {
+                if (!(sender instanceof Player player)) return true;
                 if (args.length != 2) {
                     player.sendMessage(CC.translate("&c/kit set <name>"));
                     return true;
@@ -119,7 +118,7 @@ public final class KitCommand implements CommandExecutor {
 
                 kit.loadout(player.getInventory());
                 kit.save();
-                player.sendMessage((CC.translate("&6Updated &e" + kit.getName() + "'s &6loadout.")));
+                sender.sendMessage((CC.translate("&6Updated &e" + kit.getName() + "'s &6loadout.")));
                 return true;
             }
         }
