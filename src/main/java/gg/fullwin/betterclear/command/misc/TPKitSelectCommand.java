@@ -20,6 +20,7 @@ public final class TPKitSelectCommand implements CommandExecutor {
 
         Location destination = new Location(player.getWorld(), -21.5, 202, 0.5, (float) 89.891, (float) 2.297);
         player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 20, 255, true, false));
+        player.addPotionEffect(new PotionEffect(PotionEffectType.DARKNESS, 20, 255, true, false));
         player.teleport(destination);
         return true;
     }
