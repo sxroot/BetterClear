@@ -40,4 +40,9 @@ public final class ItemStackBase64 {
         }
         return new ItemStack[0];
     }
+
+    public static boolean isArmor(@NotNull ItemStack itemStack) {
+        String name = itemStack.getType().toString().toLowerCase();
+        return name.contains("helmet") || name.contains("chestplate") ||name.contains("leggings") ||name.contains("boots");
+    }
 }

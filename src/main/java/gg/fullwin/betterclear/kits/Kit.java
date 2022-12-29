@@ -12,6 +12,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static gg.fullwin.betterclear.util.ItemStackBase64.isArmor;
+
 public final class Kit {
     private static final @NotNull List<Kit> kits = new ArrayList<>();
     private @NotNull String name;
@@ -48,7 +50,7 @@ public final class Kit {
 
     public void loadout(@NotNull PlayerInventory inventory) {
         for (ItemStack itemStack : inventory.getContents()) {
-            if (itemStack != null) {
+            if (itemStack != null && !isArmor(itemStack)) {
                 loadout.add(itemStack.clone());
                 System.out.println(itemStack.getType());
             }
