@@ -82,8 +82,8 @@ public final class KitCommand implements CommandExecutor {
                     return false;
                 }
 
-                player.getInventory().setArmorContents(kit.getInventory().getArmorContents());
-                player.getInventory().setContents(kit.getInventory().getContents());
+                player.getInventory().setArmorContents(kit.armourLoadout());
+                player.getInventory().setContents(kit.loadout());
                 player.updateInventory();
                 player.sendMessage(CC.translate("&6You received the kit's inventory."));
                 return true;
@@ -101,7 +101,7 @@ public final class KitCommand implements CommandExecutor {
                     return false;
                 }
 
-                kit.setInventory(player.getInventory());
+                kit.loadout(player.getInventory());
                 kit.save();
                 player.sendMessage((CC.translate("&6Updated kit's loadout.")));
                 return true;

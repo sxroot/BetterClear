@@ -1,49 +1,70 @@
 package gg.fullwin.betterclear.kits;
 
 import gg.fullwin.betterclear.BetterClear;
-import gg.fullwin.betterclear.util.InventoryUtil;
+import gg.fullwin.betterclear.util.ItemStackBase64;
 import gg.fullwin.betterclear.util.config.BasicConfigurationFile;
-import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 public final class Kit {
-    private static final List<Kit> kits = new ArrayList<>();
-    private final String name;
-    private PlayerInventory inventory;
-    private final KitEffects kitEffects = new KitEffects();
+    private static final @NotNull List<Kit> kits = new ArrayList<>();
+    private @NotNull String name;
+    private final @NotNull List<ItemStack> loadout = new ArrayList<>();
+    private final @NotNull List<ItemStack> armourLoadout = new ArrayList<>();
+    private final @NotNull KitEffects kitEffects = new KitEffects();
 
-    public Kit(String name, PlayerInventory inventory) {
+    public Kit(@NotNull String name, @NotNull PlayerInventory inventory) {
         this.name = name;
-        this.inventory = inventory;
+        for (ItemStack itemStack : inventory.getArmorContents()) if (itemStack != null) armourLoadout.add(itemStack.clone());
+        for (ItemStack itemStack : inventory.getContents()) if (itemStack != null) loadout.add(itemStack.clone());
     }
 
-    public static List<Kit> getKits() {
-        return kits;
+    public Kit(@NotNull String name, @NotNull ItemStack[] loadout, @NotNull ItemStack[] armourLoadout) {
+        this.name = name;
+        for (ItemStack itemStack : armourLoadout) this.armourLoadout.add(itemStack.clone());
+        for (ItemStack itemStack : loadout) this.loadout.add(itemStack.clone());
     }
 
-    public String getName() {
+    public @NotNull String getName() {
         return name;
     }
 
-    public PlayerInventory getInventory() {
-        return inventory;
+    public void setName(@NotNull String name) {
+        this.name = name;
     }
 
-    public void setInventory(PlayerInventory inventory) {
-        this.inventory = inventory;
+    public @NotNull ItemStack[] loadout() {
+        return loadout.toArray(new ItemStack[0]);
     }
 
-    public KitEffects getKitEffects() {
-        return kitEffects;
+    public @NotNull ItemStack[] armourLoadout() {
+        return armourLoadout.toArray(new ItemStack[0]);
+    }
+
+    public void loadout(@NotNull PlayerInventory inventory) {
+        for (ItemStack itemStack : inventory.getArmorContents()) {
+            if (itemStack != null) {
+                armourLoadout.add(itemStack.clone());
+                System.out.println(itemStack.getType());
+            }
+        }
+        for (ItemStack itemStack : inventory.getContents()) {
+            if (itemStack != null) {
+                loadout.add(itemStack.clone());
+                System.out.println(itemStack.getType());
+            }
+        }
     }
 
     public void delete() {
         kits.remove(this);
-        BetterClear.getInstance().getKitsConfig().getConfiguration().set("kits." + getName(), null);
+        BetterClear.getInstance().getKitsConfig().getConfiguration().set("kits." + name, null);
         try {
             BetterClear.getInstance().getKitsConfig().getConfiguration().save(BetterClear.getInstance().getKitsConfig().getFile());
         } catch (IOException e) {
@@ -55,8 +76,8 @@ public final class Kit {
         String path = "kits." + name;
         BasicConfigurationFile configFile = BetterClear.getInstance().getKitsConfig();
 
-        configFile.getConfiguration().set(path + ".loadout.armor", InventoryUtil.itemStackArrayToBase64(inventory.getArmorContents()));
-        configFile.getConfiguration().set(path + ".loadout.contents", InventoryUtil.itemStackArrayToBase64(inventory.getContents()));
+        configFile.getConfiguration().set(path + ".armor", ItemStackBase64.base64(armourLoadout.toArray(new ItemStack[0])));
+        configFile.getConfiguration().set(path + ".contents", ItemStackBase64.base64(loadout.toArray(new ItemStack[0])));
         configFile.getConfiguration().set(path + ".effects", KitEffects.serialize(kitEffects));
 
         try {
@@ -66,8 +87,15 @@ public final class Kit {
         }
     }
 
-    // get a kit by name
-    public static Kit getByName(String name) {
+    public static void load() {
+
+    }
+
+    public static @NotNull List<Kit> getKits() {
+        return kits;
+    }
+
+    public static @Nullable Kit getByName(String name) {
         for (Kit kit : kits) if (kit.getName().equalsIgnoreCase(name)) return kit;
         return null;
     }
