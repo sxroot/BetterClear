@@ -21,8 +21,7 @@ public final class Kit {
 
     public Kit(@NotNull String name, @NotNull PlayerInventory inventory) {
         this.name = name;
-        for (ItemStack itemStack : inventory.getArmorContents()) if (itemStack != null) armourLoadout.add(itemStack.clone());
-        for (ItemStack itemStack : inventory.getContents()) if (itemStack != null) loadout.add(itemStack.clone());
+        loadout(inventory);
     }
 
     public Kit(@NotNull String name, @NotNull ItemStack[] loadout, @NotNull ItemStack[] armourLoadout) {
