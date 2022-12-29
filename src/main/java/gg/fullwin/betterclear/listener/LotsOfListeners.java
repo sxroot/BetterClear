@@ -2,6 +2,7 @@ package gg.fullwin.betterclear.listener;
 
 import gg.fullwin.betterclear.BetterClear;
 import gg.fullwin.betterclear.util.CC;
+import gg.fullwin.betterclear.util.UnicodeUtil;
 import org.bukkit.*;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -49,7 +50,7 @@ public final class LotsOfListeners implements Listener {
             if (killer.hasMetadata("alllivesmatter"))
                 killer.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 40 * 20, 0));
             e.setDeathMessage(ChatColor.WHITE + killer.getName() + ChatColor.GRAY + " killed " + ChatColor.WHITE + player.getName() + ChatColor.GRAY + " with " + ChatColor.RED + Math.round(killer.getHealth() / 2) + " \u2764");
-            String message = CC.translate("&cʀᴇᴄᴇɪᴠᴇᴅ ᴀ ʜᴇᴀʟ ꜰᴏʀ ᴋɪʟʟɪɴɢ ᴘʟᴀʏᴇʀ");
+            String message = CC.translate("&cʀᴇᴄᴇɪᴠᴇᴅ ᴀ ʜᴇᴀʟ ꜰᴏʀ ᴋɪʟʟɪɴɢ ᴘʟᴀʏᴇʀ" + UnicodeUtil.parse(player.getName()));
             killer.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(message));
             killer.setHealth(20);
         }
