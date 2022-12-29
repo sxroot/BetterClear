@@ -14,4 +14,14 @@ public class KitEffects {
         if (!builder.isEmpty()) builder.deleteCharAt(builder.length()-1);
         return builder.toString();
     }
+
+    public static KitEffects from(String string) {
+        KitEffects kitEffects = new KitEffects();
+        if (string.contains("speed")) kitEffects.speed = true;
+        if (string.contains("strength")) kitEffects.strength = true;
+        if (string.contains("black")) kitEffects.black = true;
+        if (string.contains("white")) kitEffects.white = true;
+        if (string.contains("cancer")) kitEffects.cancer = true;
+        return kitEffects;
+    }
 }

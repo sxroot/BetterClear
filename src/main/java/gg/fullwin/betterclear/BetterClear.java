@@ -29,6 +29,8 @@ public final class BetterClear extends JavaPlugin {
         betterClear = this;
         kitsConfig = new BasicConfigurationFile(this, "kits");
 
+        Kit.load();
+
         StatsRegistry statsRegistry = new StatsRegistry();
 
         // regitster commands
