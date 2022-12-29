@@ -59,12 +59,12 @@ public final class LotsOfListeners implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onJoin(PlayerJoinEvent e) {
-        e.setJoinMessage(null);
         Player player = e.getPlayer();
         player.getInventory().clear();
         player.getActivePotionEffects().forEach(potionEffect -> player.removePotionEffect(potionEffect.getType()));
         player.removeMetadata("blacklivesmatter", JavaPlugin.getPlugin(BetterClear.class));
         player.removeMetadata("alllivesmatter", JavaPlugin.getPlugin(BetterClear.class));
+        e.getPlayer().setGameMode(GameMode.ADVENTURE);
         e.setJoinMessage(null);
     }
 
