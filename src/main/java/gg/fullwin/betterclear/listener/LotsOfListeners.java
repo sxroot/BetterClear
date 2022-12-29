@@ -1,10 +1,9 @@
 package gg.fullwin.betterclear.listener;
 
 import gg.fullwin.betterclear.BetterClear;
-import org.bukkit.ChatColor;
-import org.bukkit.GameMode;
-import org.bukkit.Location;
-import org.bukkit.Material;
+import gg.fullwin.betterclear.util.CC;
+import org.bukkit.*;
+import org.bukkit.block.Sign;
 import org.bukkit.block.data.type.TrapDoor;
 import org.bukkit.entity.ItemFrame;
 import org.bukkit.entity.Player;
@@ -17,10 +16,15 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.*;
 import org.bukkit.event.player.*;
 import org.bukkit.event.server.ServerListPingEvent;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.PotionMeta;
+import org.bukkit.material.MaterialData;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.potion.PotionData;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.potion.PotionType;
 
 public final class LotsOfListeners implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
@@ -56,6 +60,12 @@ public final class LotsOfListeners implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onJoin(PlayerJoinEvent e) {
         e.setJoinMessage(null);
+        Player player = e.getPlayer();
+        player.getInventory().clear();
+        player.getActivePotionEffects().forEach(potionEffect -> player.removePotionEffect(potionEffect.getType()));
+        player.removeMetadata("blacklivesmatter", JavaPlugin.getPlugin(BetterClear.class));
+        player.removeMetadata("alllivesmatter", JavaPlugin.getPlugin(BetterClear.class));
+        e.setJoinMessage(null);
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
@@ -67,12 +77,7 @@ public final class LotsOfListeners implements Listener {
     public void onVariousDoors(PlayerInteractEvent e) {
         if (e.getAction() == Action.RIGHT_CLICK_BLOCK) {
             //System.out.println("RIGHT CLICKED A BLOCK!");
-            if (e.getClickedBlock() != null && e.getClickedBlock().getType().name().endsWith("DOOR")) {
-                //System.out.println("OMG A DOOR?!");
-                if (!e.getPlayer().hasMetadata("ibebuildinghere")) {
-                    e.setCancelled(true);
-                }
-            }
+
         }
     }
 
@@ -83,18 +88,23 @@ public final class LotsOfListeners implements Listener {
         }
 
         if (e.getAction() == Action.RIGHT_CLICK_BLOCK) {
-            if (e.getItem().getType() == Material.PAINTING) {
+            if (e.getClickedBlock() instanceof Sign sign && sign.getLine(1).contains("[Refill]")) {
+                Inventory inventory = Bukkit.createInventory(null, 27, "Refill");
+                ItemStack potion = new ItemStack(Material.SPLASH_POTION);
+                PotionMeta potionMeta = ((PotionMeta) potion.getItemMeta());
+                assert potionMeta != null;
+                potionMeta.setBasePotionData(new PotionData(PotionType.INSTANT_HEAL, true, false));
+                potion.setItemMeta(potionMeta);
+                for (int i = 0; i < 27; i++) inventory.addItem(potion);
+                e.getPlayer().openInventory(inventory);
+            }
+
+            if (e.getItem().getType() == Material.PAINTING ||
+                    e.getClickedBlock().getType().name().endsWith("DOOR") ||
+                    e.getClickedBlock().getState() instanceof ItemFrame) {
                 if (e.getPlayer().getGameMode() != GameMode.CREATIVE) {
                     if (!e.getPlayer().hasMetadata("ibebuildinghere"))
                         e.setCancelled(true);
-                }
-            }
-        }
-
-        if (e.getClickedBlock().getState() instanceof ItemFrame) {
-            if (e.getPlayer().getGameMode() != GameMode.CREATIVE) {
-                if (!e.getPlayer().hasMetadata("ibebuildinghere")) {
-                    e.setCancelled(true);
                 }
             }
         }
@@ -173,5 +183,4 @@ public final class LotsOfListeners implements Listener {
             event.setCancelled(true);
         }
     }
-
 }
