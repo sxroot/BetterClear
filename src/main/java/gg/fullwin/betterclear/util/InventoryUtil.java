@@ -1,268 +1,164 @@
 package gg.fullwin.betterclear.util;
 
-import gg.fullwin.betterclear.BetterClear;
-import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
-import org.bukkit.enchantments.Enchantment;
+import org.bukkit.Bukkit;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.Recipe;
-import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.util.io.BukkitObjectInputStream;
+import org.bukkit.util.io.BukkitObjectOutputStream;
+import org.yaml.snakeyaml.external.biz.base64Coder.Base64Coder;
 
-import java.util.*;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
-public class InventoryUtil {
+public final class InventoryUtil {
+    /**
+     * Converts the player inventory to a String array of Base64 strings. First string is the content and second string is the armor.
+     *
+     * @param playerInventory to turn into an array of strings.
+     * @return Array of strings: [ main content, armor content ]
+     * @throws IllegalStateException
+     */
+    public static String[] playerInventoryToBase64(PlayerInventory playerInventory) throws IllegalStateException {
+        //get the main content part, this doesn't return the armor
+        String content = toBase64(playerInventory);
+        String armor = itemStackArrayToBase64(playerInventory.getArmorContents());
 
-    public static ItemStack[] fixInventoryOrder(ItemStack[] source) {
-        ItemStack[] fixed = new ItemStack[36];
-
-        System.arraycopy(source, 0, fixed, 27, 9);
-        System.arraycopy(source, 9, fixed, 0, 27);
-
-        return fixed;
+        return new String[] { content, armor };
     }
 
-    public static String serializeInventory(ItemStack[] source) {
-        StringBuilder builder = new StringBuilder();
+    /**
+     *
+     * A method to serialize an {@link ItemStack} array to Base64 String.
+     *
+     * <p />
+     *
+     * Based off of {@link #toBase64(Inventory)}.
+     *
+     * @param items to turn into a Base64 String.
+     * @return Base64 string of the items.
+     * @throws IllegalStateException
+     */
+    public static String itemStackArrayToBase64(ItemStack[] items) throws IllegalStateException {
+        try {
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            BukkitObjectOutputStream dataOutput = new BukkitObjectOutputStream(outputStream);
 
-        for (ItemStack itemStack : source) {
-            builder.append(serializeItemStack(itemStack));
-            builder.append(";");
-        }
+            // Write the size of the inventory
+            dataOutput.writeInt(items.length);
 
-        return builder.toString();
-    }
-
-    public static ItemStack[] deserializeInventory(String source) {
-        List<ItemStack> items = new ArrayList<>();
-        String[] split = source.split(";");
-
-        for (String piece : split) {
-            items.add(deserializeItemStack(piece));
-        }
-
-        return items.toArray(new ItemStack[items.size()]);
-    }
-
-    public static String serializeEffects(List<PotionEffect> source) {
-        StringBuilder builder = new StringBuilder();
-        if (source.size() == 0) return null;
-
-        for (PotionEffect potionEffect : source) {
-            String potionString = serializeEffect(potionEffect);
-            if (potionString == null || potionString == "null") continue;
-
-            builder.append(potionString);
-            builder.append(";");
-        }
-
-        return builder.toString();
-    }
-
-    public static List<PotionEffect> deserializeEffects(String source) {
-        List<PotionEffect> items = new ArrayList<>();
-
-        if (source.equalsIgnoreCase(""))
-            return null;
-
-        String[] split = source.split(";");
-
-        for (String piece : split) {
-            items.add(deserializeEffect(piece));
-        }
-
-        return items;
-    }
-
-    public static String serializeItemStack(ItemStack item) {
-        StringBuilder builder = new StringBuilder();
-
-        if (item == null) {
-            return "null";
-        }
-
-        String isType = String.valueOf(item.getType().getId());
-        builder.append("t@").append(isType);
-
-        if (item.getDurability() != 0) {
-            String isDurability = String.valueOf(item.getDurability());
-            builder.append(":d@").append(isDurability);
-        }
-
-        if (item.getAmount() != 1) {
-            String isAmount = String.valueOf(item.getAmount());
-            builder.append(":a@").append(isAmount);
-        }
-
-        Map<Enchantment, Integer> enchantments = item.getEnchantments();
-
-        if (enchantments.size() > 0) {
-            for (Map.Entry<Enchantment, Integer> enchantment : enchantments.entrySet()) {
-                builder.append(":e@").append(enchantment.getKey().getKey()).append("@").append(enchantment.getValue());
-            }
-        }
-
-        if (item.hasItemMeta()) {
-            ItemMeta itemMeta = item.getItemMeta();
-
-            if (itemMeta.hasDisplayName()) {
-                builder.append(":dn@").append(itemMeta.getDisplayName());
+            // Save every element in the list
+            for (int i = 0; i < items.length; i++) {
+                dataOutput.writeObject(items[i]);
             }
 
-            if (itemMeta.hasLore()) {
-                builder.append(":l@").append(itemMeta.getLore());
+            // Serialize that array
+            dataOutput.close();
+            return Base64Coder.encodeLines(outputStream.toByteArray());
+        } catch (Exception e) {
+            throw new IllegalStateException("Unable to save item stacks.", e);
+        }
+    }
+
+    /**
+     * A method to serialize an inventory to Base64 string.
+     *
+     * <p />
+     *
+     * Special thanks to Comphenix in the Bukkit forums or also known
+     * as aadnk on GitHub.
+     *
+     * <a href="https://gist.github.com/aadnk/8138186">Original Source</a>
+     *
+     * @param inventory to serialize
+     * @return Base64 string of the provided inventory
+     * @throws IllegalStateException
+     */
+    public static String toBase64(Inventory inventory) throws IllegalStateException {
+        try {
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            BukkitObjectOutputStream dataOutput = new BukkitObjectOutputStream(outputStream);
+
+            // Write the size of the inventory
+            dataOutput.writeInt(inventory.getSize());
+
+            // Save every element in the list
+            for (int i = 0; i < inventory.getSize(); i++) {
+                dataOutput.writeObject(inventory.getItem(i));
             }
-        }
 
-        return builder.toString();
+            // Serialize that array
+            dataOutput.close();
+            return Base64Coder.encodeLines(outputStream.toByteArray());
+        } catch (Exception e) {
+            throw new IllegalStateException("Unable to save item stacks.", e);
+        }
     }
 
-    public static ItemStack deserializeItemStack(String in) {
-        ItemStack item = null;
-        ItemMeta meta = null;
+    /**
+     *
+     * A method to get an {@link Inventory} from an encoded, Base64, string.
+     *
+     * <p />
+     *
+     * Special thanks to Comphenix in the Bukkit forums or also known
+     * as aadnk on GitHub.
+     *
+     * <a href="https://gist.github.com/aadnk/8138186">Original Source</a>
+     *
+     * @param data Base64 string of data containing an inventory.
+     * @return Inventory created from the Base64 string.
+     * @throws IOException
+     */
+    public static Inventory fromBase64(String data) throws IOException {
+        try {
+            ByteArrayInputStream inputStream = new ByteArrayInputStream(Base64Coder.decodeLines(data));
+            BukkitObjectInputStream dataInput = new BukkitObjectInputStream(inputStream);
+            Inventory inventory = Bukkit.getServer().createInventory(null, dataInput.readInt());
 
-        if (in.equals("null")) {
-            return new ItemStack(Material.AIR);
-        }
-
-        String[] split = in.split(":");
-
-        for (String itemInfo : split) {
-            String[] itemAttribute = itemInfo.split("@");
-            String attributeId = itemAttribute[0];
-
-            switch (attributeId) {
-                case "t": {
-                    item = new ItemStack(Material.getMaterial(itemAttribute[1]));
-                    meta = item.getItemMeta();
-                    break;
-                }
-                case "d": {
-                    if (item != null) {
-                        item.setDurability(Short.valueOf(itemAttribute[1]));
-                        break;
-                    }
-                    break;
-                }
-                case "a": {
-                    if (item != null) {
-                        item.setAmount(Integer.valueOf(itemAttribute[1]));
-                        break;
-                    }
-                    break;
-                }
-                case "e": {
-                    if (item != null) {
-                        item.addUnsafeEnchantment(
-                                Enchantment.getByKey(NamespacedKey.minecraft(itemAttribute[1])),
-                                Integer.valueOf(itemAttribute[2])
-                        );
-                        break;
-                    }
-                    break;
-                }
-                case "dn": {
-                    if (meta != null) {
-                        meta.setDisplayName(itemAttribute[1]);
-                        break;
-                    }
-                    break;
-                }
-                case "l": {
-                    itemAttribute[1] = itemAttribute[1].replace("[", "");
-                    itemAttribute[1] = itemAttribute[1].replace("]", "");
-                    List<String> lore = Arrays.asList(itemAttribute[1].split(","));
-
-                    for (int x = 0; x < lore.size(); ++x) {
-                        String s = lore.get(x);
-
-                        if (s != null) {
-                            if (s.toCharArray().length != 0) {
-                                if (s.charAt(0) == ' ') {
-                                    s = s.replaceFirst(" ", "");
-                                }
-
-                                lore.set(x, s);
-                            }
-                        }
-                    }
-
-                    if (meta != null) {
-                        meta.setLore(lore);
-                        break;
-                    }
-
-                    break;
-                }
+            // Read the serialized inventory
+            for (int i = 0; i < inventory.getSize(); i++) {
+                inventory.setItem(i, (ItemStack) dataInput.readObject());
             }
-        }
 
-        if (meta != null && (meta.hasDisplayName() || meta.hasLore())) {
-            item.setItemMeta(meta);
+            dataInput.close();
+            return inventory;
+        } catch (ClassNotFoundException e) {
+            throw new IOException("Unable to decode class type.", e);
         }
-
-        return item;
     }
 
-    public static String serializeEffect(PotionEffect item) {
-        StringBuilder builder = new StringBuilder();
+    /**
+     * Gets an array of ItemStacks from Base64 string.
+     *
+     * <p />
+     *
+     * Base off of {@link #fromBase64(String)}.
+     *
+     * @param data Base64 string to convert to ItemStack array.
+     * @return ItemStack array created from the Base64 string.
+     * @throws IOException
+     */
+    public static ItemStack[] itemStackArrayFromBase64(String data) throws IOException {
+        try {
+            ByteArrayInputStream inputStream = new ByteArrayInputStream(Base64Coder.decodeLines(data));
+            BukkitObjectInputStream dataInput = new BukkitObjectInputStream(inputStream);
+            ItemStack[] items = new ItemStack[dataInput.readInt()];
 
-        if (item == null) {
-            return "null";
-        }
-
-        builder.append("t@").append(item.getType().getName());
-        builder.append(":d@").append(item.getDuration());
-        builder.append(":a@").append(item.getAmplifier());
-
-        return builder.toString();
-    }
-
-    public static PotionEffect deserializeEffect(String in) {
-        PotionEffect effect = null;
-        PotionEffectType type = null;
-        int duration = 0;
-        int amplifier = 0;
-
-        String[] split = in.split(":");
-
-        for (String itemInfo : split) {
-            String[] itemAttribute = itemInfo.split("@");
-            String attributeId = itemAttribute[0];
-
-            switch (attributeId) {
-                case "t": {
-                    type = PotionEffectType.getByName(itemAttribute[1]);
-                    break;
-                }
-                case "d": {
-                    duration = Integer.parseInt(itemAttribute[1]);
-                    break;
-                }
-                case "a": {
-                    amplifier = Integer.parseInt(itemAttribute[1]);
-                    break;
-                }
+            // Read the serialized inventory
+            for (int i = 0; i < items.length; i++) {
+                items[i] = (ItemStack) dataInput.readObject();
             }
-        }
 
-        effect = new PotionEffect(type, duration, amplifier);
-
-        return effect;
-    }
-
-    public static void removeCrafting(Material material) {
-        Iterator<Recipe> iterator = BetterClear.getInstance().getServer().recipeIterator();
-
-        while (iterator.hasNext()) {
-            Recipe recipe = iterator.next();
-
-            if (recipe != null && recipe.getResult().getType() == material) {
-                iterator.remove();
-            }
+            dataInput.close();
+            return items;
+        } catch (ClassNotFoundException e) {
+            throw new IOException("Unable to decode class type.", e);
         }
     }
-
 }
-

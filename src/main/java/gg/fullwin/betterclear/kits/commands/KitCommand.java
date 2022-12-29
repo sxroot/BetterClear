@@ -7,121 +7,104 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.potion.PotionEffect;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public final class KitCommand implements CommandExecutor {
     @Override
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String kitName, String[] args) {
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
+        if (!(sender instanceof Player player)) return true;
 
-        Player player = (Player) sender;
+        if (!player.hasPermission("fullwin.kit")) {
+            player.sendMessage("Unknown command. Type \"/help\" for help.");
+            return true;
+        }
 
         if (args.length == 0) {
-
-            if (!sender.hasPermission("fullwin.kit")) {
-                sender.sendMessage("Unknown command. Type \"/help\" for help.");
-                return true;
-            }
-
-            sender.sendMessage(ChatColor.GOLD.toString() + ChatColor.BOLD + "Kit Commands:",
-                    " /kits " + ChatColor.YELLOW + "Display all avaliable kits",
+            player.sendMessage(ChatColor.GOLD.toString() + ChatColor.BOLD + "Kit Commands:",
+                    " /kits " + ChatColor.YELLOW + "Display all available kits",
                     " /kit create " + ChatColor.YELLOW + "Create a kit",
                     " /kit delete " + ChatColor.YELLOW + "Delete a kit",
                     " /kit edit " + ChatColor.YELLOW + "Edit a kit",
                     " /kit effects " + ChatColor.YELLOW + "Add effects for the kit",
                     ""
             );
+            return true;
         }
 
-        if (args.length > 1) {
-            switch (args[0]) {
-                case "create":
-                    if (!sender.hasPermission("fullwin.kit.create")) {
-                        sender.sendMessage("Unknown command. Type \"/help\" for help.");
-                        return true;
-                    }
-
-                    if (Kit.getByName(kitName) != null) {
-                        sender.sendMessage(CC.translate("&cThis kit already exist."));
-                        return true;
-                    }
-
-                    // create kit etc
-                    Kit kit = new Kit(kitName);
-                    kit.save();
-                    Kit.getKits().add(kit);
-                    sender.sendMessage(CC.translate("&6Created a new kit &e" + kit.getDisplayName() + "&6."));
+        switch (args[0]) {
+            case "create" -> {
+                if (args.length != 2) {
+                    player.sendMessage(CC.translate("&c/kit create <name>"));
                     return true;
+                }
 
-                case "delete":
-                    if (!sender.hasPermission("fullwin.kit.delete")) {
-                        sender.sendMessage("Unknown command. Type \"/help\" for help.");
-                        return true;
-                    }
-
-                    if (kitName == null) {
-                        sender.sendMessage(CC.translate("&cYou have to provide a name."));
-                        return false;
-                    }
-
-                    final Kit delKit = Kit.getByName(kitName);
-                    if (delKit != null) {
-                        delKit.delete();
-                        Kit.getKits().forEach(Kit::save);
-                        sender.sendMessage(CC.translate("&6Removed the kit &e" + delKit.getName() + "&6."));
-                        return true;
-                    }
-
-                case "effects":
-                    //effects shitter
-
-                case "getinv":
-                    if (!sender.hasPermission("fullwin.kit.getinv")) {
-                        sender.sendMessage("Unknown command. Type \"/help\" for help.");
-                        return true;
-                    }
-
-                    System.out.println("u have perms");
-
-                    final Kit getInvKit = Kit.getByName(kitName);
-
-                    if (getInvKit == null) {
-                        player.sendMessage(CC.translate("&cThat kit doesn't exist."));
-                        System.out.println("racism is bad!");
-                        return false;
-                    }
-
-                    System.out.println("GREAT SUCCESS?");
-                    player.getInventory().setArmorContents(getInvKit.getKitInventory().getArmor());
-                    player.getInventory().setContents(getInvKit.getKitInventory().getContents());
-                    player.addPotionEffects(getInvKit.getKitInventory().getEffects());
-                    player.updateInventory();
-                    player.sendMessage(CC.translate("&6You received the kit's inventory."));
+                if (Kit.getByName(args[1]) != null) {
+                    player.sendMessage(CC.translate("&cThis kit already exist."));
                     return true;
+                }
 
-                case "setinv":
-                    if (!sender.hasPermission("fullwin.kit.setinv")) {
-                        sender.sendMessage("Unknown command. Type \"/help\" for help.");
-                        return true;
-                    }
+                // create kit etc
+                Kit kit = new Kit(args[1], player.getInventory());
+                kit.save();
+                Kit.getKits().add(kit);
+                player.sendMessage(CC.translate("&6Created a new kit &e" + kit.getName() + "&6."));
+                return true;
+            }
 
-                    final Kit setInvKit = Kit.getByName(kitName);
-
-                    if (setInvKit == null) {
-                        player.sendMessage(CC.translate("&cThat kit doesn't exist."));
-                        return false;
-                    }
-
-                    setInvKit.getKitInventory().setArmor(player.getInventory().getArmorContents());
-                    setInvKit.getKitInventory().setContents(player.getInventory().getContents());
-                    List<PotionEffect> potionEffects = new ArrayList<>(player.getActivePotionEffects());
-                    setInvKit.getKitInventory().setEffects(potionEffects);
-                    setInvKit.save();
-                    player.sendMessage((CC.translate("&6Updated kit's loadout.")));
+            case "delete" -> {
+                if (args.length != 2) {
+                    player.sendMessage(CC.translate("&c/kit delete <name>"));
                     return true;
+                }
+
+                Kit kit = Kit.getByName(args[1]);
+
+                if (kit == null) {
+                    player.sendMessage(CC.translate("&cThat kit doesn't exist."));
+                    return true;
+                }
+
+                kit.delete();
+                Kit.getKits().forEach(Kit::save);
+                player.sendMessage(CC.translate("&6Removed the kit &e" + kit.getName() + "&6."));
+                return true;
+            }
+            case "getinv" -> {
+                if (args.length != 2) {
+                    player.sendMessage(CC.translate("&c/kit getinv <name>"));
+                    return true;
+                }
+
+                Kit kit = Kit.getByName(args[1]);
+
+                if (kit == null) {
+                    player.sendMessage(CC.translate("&cThat kit doesn't exist."));
+                    return false;
+                }
+
+                player.getInventory().setArmorContents(kit.getInventory().getArmorContents());
+                player.getInventory().setContents(kit.getInventory().getContents());
+                player.updateInventory();
+                player.sendMessage(CC.translate("&6You received the kit's inventory."));
+                return true;
+            }
+            case "setinv" -> {
+                if (args.length != 2) {
+                    player.sendMessage(CC.translate("&c/kit setinv <name>"));
+                    return true;
+                }
+
+                Kit kit = Kit.getByName(args[1]);
+
+                if (kit == null) {
+                    player.sendMessage(CC.translate("&cThat kit doesn't exist."));
+                    return false;
+                }
+
+                kit.setInventory(player.getInventory());
+                kit.save();
+                player.sendMessage((CC.translate("&6Updated kit's loadout.")));
+                return true;
             }
         }
         return true;

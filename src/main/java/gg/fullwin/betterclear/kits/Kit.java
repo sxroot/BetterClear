@@ -3,29 +3,22 @@ package gg.fullwin.betterclear.kits;
 import gg.fullwin.betterclear.BetterClear;
 import gg.fullwin.betterclear.util.InventoryUtil;
 import gg.fullwin.betterclear.util.config.BasicConfigurationFile;
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
-import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.PlayerInventory;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-// Main kit shiz
-public class Kit {
-
-    // kit shizzle
+public final class Kit {
     private static final List<Kit> kits = new ArrayList<>();
     private final String name;
-    private final KitInventory kitInventory= new KitInventory();
+    private PlayerInventory inventory;
     private final KitEffects kitEffects = new KitEffects();
-    private final String displayName;
-    private final ItemStack displayIcon;
 
-    public Kit(String name) {
+    public Kit(String name, PlayerInventory inventory) {
         this.name = name;
-        this.displayName = ChatColor.GOLD + name;
-        this.displayIcon = new ItemStack(Material.NETHERITE_INGOT);
+        this.inventory = inventory;
     }
 
     public static List<Kit> getKits() {
@@ -36,24 +29,19 @@ public class Kit {
         return name;
     }
 
-    public String getDisplayName() {
-        return displayName;
+    public PlayerInventory getInventory() {
+        return inventory;
     }
 
-    public ItemStack getDisplayIcon() {
-        return this.displayIcon.clone();
+    public void setInventory(PlayerInventory inventory) {
+        this.inventory = inventory;
     }
 
     public KitEffects getKitEffects() {
         return kitEffects;
     }
 
-    public KitInventory getKitInventory() {
-        return kitInventory;
-    }
-
     public void delete() {
-        // delete kit
         kits.remove(this);
         BetterClear.getInstance().getKitsConfig().getConfiguration().set("kits." + getName(), null);
         try {
@@ -64,15 +52,12 @@ public class Kit {
     }
 
     public void save() {
-        // create/save kit
         String path = "kits." + name;
         BasicConfigurationFile configFile = BetterClear.getInstance().getKitsConfig();
 
-        configFile.getConfiguration().set(path + ".icon.material", displayIcon.getType().name());
-        configFile.getConfiguration().set(path + ".icon.durability", displayIcon.getDurability());
-        configFile.getConfiguration().set(path + ".loadout.armor", InventoryUtil.serializeInventory(kitInventory.getArmor()));
-        configFile.getConfiguration().set(path + ".loadout.contents", InventoryUtil.serializeInventory(kitInventory.getContents()));
-        configFile.getConfiguration().set(path + ".loadout.effects", InventoryUtil.serializeEffects(kitInventory.getEffects()));
+        configFile.getConfiguration().set(path + ".loadout.armor", InventoryUtil.itemStackArrayToBase64(inventory.getArmorContents()));
+        configFile.getConfiguration().set(path + ".loadout.contents", InventoryUtil.itemStackArrayToBase64(inventory.getContents()));
+        configFile.getConfiguration().set(path + ".effects", KitEffects.serialize(kitEffects));
 
         try {
             configFile.getConfiguration().save(configFile.getFile());
@@ -83,12 +68,7 @@ public class Kit {
 
     // get a kit by name
     public static Kit getByName(String name) {
-        for (Kit kit : kits) {
-            if (kit.getName().equalsIgnoreCase(name)) {
-                return kit;
-            }
-        }
-
+        for (Kit kit : kits) if (kit.getName().equalsIgnoreCase(name)) return kit;
         return null;
     }
 }
