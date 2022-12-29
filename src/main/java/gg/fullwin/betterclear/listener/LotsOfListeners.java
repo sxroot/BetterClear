@@ -169,20 +169,6 @@ public final class LotsOfListeners implements Listener {
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void onEntityDamageEvent(EntityDamageEvent event) {
-        Player player = event.getEntity().getServer().getPlayer(event.getEntity().getUniqueId());
-
-        if (event.getEntity() instanceof Player) {
-            if (event.getCause() == EntityDamageEvent.DamageCause.VOID) {
-                Location destination = new Location(player.getWorld(), 0.5, 202, 0.5, (float) 269.996, (float) 0.573);
-                player.teleport(destination);
-            } else {
-                event.setCancelled(true);
-            }
-        }
-    }
-
-    @EventHandler(priority = EventPriority.HIGHEST)
     public void onFoodLoss(FoodLevelChangeEvent event) {
         if (event.getEntity() instanceof Player) {
             event.setCancelled(true);

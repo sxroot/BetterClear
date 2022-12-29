@@ -8,14 +8,14 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
 
-// List Kit Commands
 public final class KitCommand implements CommandExecutor {
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String kitName, String[] args) {
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String kitName, String[] args) {
 
         Player player = (Player) sender;
 
@@ -35,7 +35,7 @@ public final class KitCommand implements CommandExecutor {
                     ""
             );
         }
-        //u
+
         if (args.length > 1) {
             switch (args[0]) {
                 case "create":
