@@ -1,5 +1,7 @@
 package gg.fullwin.betterclear.stats;
 
+import gg.fullwin.betterclear.util.CC;
+import gg.fullwin.betterclear.util.UnicodeUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -17,13 +19,14 @@ public record StatsCommand(@NotNull StatsRegistry statsRegistry) implements Comm
             return true;
         }
 
-        statsRegistry.findByUid(player.getUniqueId()).ifPresentOrElse(stats -> sender.sendMessage("",
-                        ChatColor.GOLD.toString() + ChatColor.BOLD + player.getName() + "'s stats",
-                        "Kills: " + ChatColor.YELLOW + stats.kills(),
-                        "Deaths: " + ChatColor.YELLOW + stats.deaths(),
-                        "KDR: " + ChatColor.YELLOW + stats.kdr(),
-                        "Killstreak: " + ChatColor.YELLOW + stats.killstreak(),
-                        "Maxstreak: " + ChatColor.YELLOW + stats.maxstreak(),
+        statsRegistry.findByUid(player.getUniqueId()).ifPresentOrElse(stats -> sender.sendMessage(
+                        "",
+                        CC.FULLWIN + CC.BOLD + UnicodeUtil.parse(player.getName() + "'s stats:"),
+                        UnicodeUtil.parse(" Kills: ") + CC.PISS + stats.kills(),
+                        UnicodeUtil.parse(" Deaths: ") + CC.PISS + stats.deaths(),
+                        UnicodeUtil.parse(" KDR: ") + CC.PISS + stats.kdr(),
+                        UnicodeUtil.parse(" Killstreak: ") + CC.PISS + stats.killstreak(),
+                        UnicodeUtil.parse(" Maxstreak: ") + CC.PISS + stats.maxstreak(),
                         ""),
                 () -> sender.sendMessage("No stats found for " + player.getName() + "."));
         return true;

@@ -2,6 +2,7 @@ package gg.fullwin.betterclear.kits.commands;
 
 import gg.fullwin.betterclear.kits.Kit;
 import gg.fullwin.betterclear.util.CC;
+import gg.fullwin.betterclear.util.UnicodeUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -19,12 +20,15 @@ public final class KitCommand implements CommandExecutor {
         }
 
         if (args.length == 0) {
-            sender.sendMessage(ChatColor.GOLD.toString() + ChatColor.BOLD + "Kit Commands:",
-                    " /kits " + ChatColor.YELLOW + "Display all available kits",
-                    " /kit create " + ChatColor.YELLOW + "Create a kit",
-                    " /kit delete " + ChatColor.YELLOW + "Delete a kit",
-                    " /kit give " + ChatColor.YELLOW + "Give a kit",
-                    " /kit set " + ChatColor.YELLOW + "Edit a kit",
+
+            sender.sendMessage(
+                    "",
+                    CC.FULLWIN + CC.BOLD + UnicodeUtil.parse("Kit Commands:"),
+                    UnicodeUtil.parse(" /kits ") + CC.PISS + UnicodeUtil.parse("Display all available kits"),
+                    UnicodeUtil.parse(" /kit create ") + CC.PISS + UnicodeUtil.parse("Create a kit"),
+                    UnicodeUtil.parse(" /kit delete ") + CC.PISS + UnicodeUtil.parse("Delete a kit"),
+                    UnicodeUtil.parse(" /kit give ") + CC.PISS + UnicodeUtil.parse("Give a kit"),
+                    UnicodeUtil.parse(" /kit set ") + CC.PISS + UnicodeUtil.parse("Edit a kit"),
                     ""
             );
             return true;
