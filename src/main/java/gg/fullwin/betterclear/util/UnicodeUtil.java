@@ -4,7 +4,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class UnicodeUtil {
     public static @NotNull String parse(@NotNull String string) {
-        return string.toLowerCase()
+        return string.toUpperCase()
                 .replace("Q", "q")
                 .replace("W", "ᴡ")
                 .replace("E", "ᴇ")
