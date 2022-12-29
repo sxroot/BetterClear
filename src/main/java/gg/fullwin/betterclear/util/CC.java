@@ -7,6 +7,9 @@ import java.util.List;
 
 public class CC {
 
+    public static final String PISS = net.md_5.bungee.api.ChatColor.of("#FFF19D").toString();
+    public static final String FULLWIN = net.md_5.bungee.api.ChatColor.of("#FEC800").toString();
+
     public static final String BLUE = ChatColor.BLUE.toString();
     public static final String AQUA = ChatColor.AQUA.toString();
     public static final String YELLOW = ChatColor.YELLOW.toString();
