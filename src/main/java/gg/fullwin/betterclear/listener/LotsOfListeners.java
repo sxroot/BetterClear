@@ -93,7 +93,7 @@ public final class LotsOfListeners implements Listener {
         }
 
         if (e.getAction() == Action.RIGHT_CLICK_BLOCK) {
-            if (e.getClickedBlock() instanceof Sign sign && sign.getLine(1).contains("[Refill]")) {
+            if (e.getClickedBlock() instanceof Sign sign) {
                 Inventory inventory = Bukkit.createInventory(null, 27, "Refill");
                 ItemStack potion = new ItemStack(Material.SPLASH_POTION);
                 PotionMeta potionMeta = ((PotionMeta) potion.getItemMeta());

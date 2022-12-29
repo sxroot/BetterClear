@@ -49,7 +49,6 @@ public final class KitCommand implements CommandExecutor {
                     return true;
                 }
 
-                // create kit etc
                 Kit kit = new Kit(args[1], player.getInventory());
                 kit.save();
                 Kit.getKits().add(kit);

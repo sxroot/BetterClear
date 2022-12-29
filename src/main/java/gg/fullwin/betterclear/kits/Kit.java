@@ -89,6 +89,10 @@ public final class Kit {
 
     public static void load() {
         ConfigurationSection config = BetterClear.getInstance().getKitsConfig().getConfiguration().getConfigurationSection("kits");
+        if (config == null) {
+            System.out.println("config null");
+            return;
+        }
         for (String key : config.getKeys(false))
             kits.add(new Kit(
                     key,
