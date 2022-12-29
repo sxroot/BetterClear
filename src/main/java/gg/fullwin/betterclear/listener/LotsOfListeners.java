@@ -16,13 +16,41 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.*;
 import org.bukkit.event.player.*;
+import org.bukkit.event.server.ServerListPingEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 public final class LotsOfListeners implements Listener {
-    @EventHandler
+
+    private static String center(String ln) {
+        StringBuilder whiteSpace = new StringBuilder();
+        String trimmed = ln.trim();
+        int charTotal = trimmed.length();
+        final String trunc;
+        if (charTotal >= 60) trunc = trimmed.substring(0, 60);
+        else trunc = trimmed;
+        int diff = 60 - charTotal;
+        int half = diff / 2;
+        int i = 1;
+        while (i <= half) { i++; whiteSpace.append(" "); }
+        StringBuilder out = new StringBuilder(whiteSpace + trunc + whiteSpace);
+        while (out.length() < 62) out.append(" ");
+        return out.toString();
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void lolMOTD(ServerListPingEvent e) {
+        final String line1 = "\u00A76\u00A7lᴋɪᴛᴘᴠᴘ \u00A7eᴇᴜ \u00A7r\u00A77[1.19.2]";
+        final String line2 = "ᴛʜɪs ɪs ᴀ ᴇxᴀᴍᴘʟᴇ ᴍᴏᴛᴅ";
+
+        e.setMotd(center(line1) + center(line2));
+        e.setMaxPlayers(100);
+    }
+
+
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void speedKill(PlayerDeathEvent e) {
         Player player = e.getEntity();
         Player killer = player.getKiller();
@@ -43,8 +71,17 @@ public final class LotsOfListeners implements Listener {
         e.getDrops().clear();
     }
 
-    // Block all Interactions with Trapdoors & Doors.
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void onJoin(PlayerJoinEvent e) {
+        e.setJoinMessage(null);
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void onJoin(PlayerQuitEvent e) {
+        e.setQuitMessage(null);
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onVariousDoors(PlayerInteractEvent e) {
         if (e.getAction() == Action.RIGHT_CLICK_BLOCK) {
             //System.out.println("RIGHT CLICKED A BLOCK!");
@@ -57,7 +94,7 @@ public final class LotsOfListeners implements Listener {
         }
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onInteract(PlayerInteractEvent e) {
         if (e.getItem() == null || e.getClickedBlock() == null) {
             return;
@@ -72,34 +109,16 @@ public final class LotsOfListeners implements Listener {
             }
         }
 
-            if (e.getClickedBlock().getState() instanceof ItemFrame) {
-                if (e.getPlayer().getGameMode() != GameMode.CREATIVE) {
-                    if (!e.getPlayer().hasMetadata("ibebuildinghere")) {
-                        e.setCancelled(true);
-                    }
+        if (e.getClickedBlock().getState() instanceof ItemFrame) {
+            if (e.getPlayer().getGameMode() != GameMode.CREATIVE) {
+                if (!e.getPlayer().hasMetadata("ibebuildinghere")) {
+                    e.setCancelled(true);
                 }
             }
         }
-
-    // Anti-block Glitch apparently ¯\_(ツ)_/¯
-    @EventHandler(priority = EventPriority.MONITOR)
-    public void onBlockBreak(BlockBreakEvent event) {
-        if (!event.isCancelled()) return;
-
-        Player player = event.getPlayer();
-        if (player.getGameMode() == GameMode.CREATIVE) return;
-
-        Location location = player.getLocation().clone();
-        if (location.getBlock().getType() == Material.AIR) return;
-        if (!location.getBlock().getType().isSolid()) return;
-
-        location.setX(location.getBlockX() + 0.5D);
-        location.setZ(location.getBlockZ() + 0.5D);
-
-        player.teleport(location);
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerPickupItemEvent(PlayerPickupItemEvent event) {
         if (event.getPlayer().getGameMode() == GameMode.CREATIVE) {
             if (!event.getPlayer().hasMetadata("ibebuildinghere")) {
@@ -141,7 +160,6 @@ public final class LotsOfListeners implements Listener {
         } else {
             event.setCancelled(true);
         }
-
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
@@ -160,7 +178,6 @@ public final class LotsOfListeners implements Listener {
         } else {
             event.setCancelled(true);
         }
-
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)

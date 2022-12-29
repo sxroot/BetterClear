@@ -16,18 +16,6 @@ commands:
     description: "YOUR MUM"
   tpkits:
     description: "YOUR NAN"
-  kit delete:
-    permission: "fullwin.kit.delete"
-    description: "DELETE KIT!"
-  kit create:
-    permission: "fullwin.kit.create"
-    description: "CREATE KIT!"
-  kit setinv:
-    permission: "fullwin.kit.setinv"
-    description: "SET INV KIT!"
-  kit getinv:
-    permission: "fullwin.kit.getinv"
-    description: "GET INV KIT!"
   kit:
     description: "VIEW KIT!"
   build:
