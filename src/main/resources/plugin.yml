@@ -30,3 +30,6 @@ commands:
     description: "GET INV KIT!"
   kit:
     description: "VIEW KIT!"
+  build:
+    permission: "fullwin.build"
+    description: "builder mode"
