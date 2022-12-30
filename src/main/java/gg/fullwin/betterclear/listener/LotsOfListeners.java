@@ -56,6 +56,19 @@ public final class LotsOfListeners implements Listener {
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
+    public void onDeath(PlayerDeathEvent e) {
+        Player player = e.getEntity();
+        Player killer = player.getKiller();
+        if (killer != null) {
+            Location destination = new Location(killer.getWorld(), -1004.5, 269.5, 0.5, (float) 225.098, (float) 0.379);
+            player.teleport(destination);
+            return;
+        }
+        Location destination = new Location(player.getWorld(), -1004.5, 269.5, 0.5, (float) 225.098, (float) 0.379);
+        player.teleport(destination);
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void speedKill(PlayerDeathEvent e) {
         Player player = e.getEntity();
         Player killer = player.getKiller();
@@ -119,12 +132,14 @@ public final class LotsOfListeners implements Listener {
     public void lolKillstreak(EntityDeathEvent e) {
         Player killer = e.getEntity().getKiller();
 
-        List<Integer> numbers = List.of(5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 60, 70, 80, 90, 100, 120, 140, 160, 180, 200);
-        String[] phrases = {"is on a killing spree with a",
+        List<Integer> numbers = List.of(5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 60, 70, 80, 90, 100, 150, 200, 250, 300, 350, 400, 450, 500);
+        String[] phrases = {
+                "is on a killing spree with a",
                 "is dominating the battlefield with a",
                 "is unstoppable with a",
                 "is a force to be reckoned with on a",
-                "is godlike on a", "is a true assassin with a",
+                "is godlike on a",
+                "is a true assassin with a",
                 "is a killing machine with a",
                 "is a master of the battlefield with a",
                 "is a legend with a",
@@ -136,7 +151,8 @@ public final class LotsOfListeners implements Listener {
                 "is a one-man army with a",
                 "is a true monster on the battlefield with a",
                 "is a absolute beast with a",
-                "is a unstoppable force with a"};
+                "is a unstoppable force with a"
+        };
         String random = phrases[(int) (Math.random() * phrases.length)];
 
         if (killer == null) return;

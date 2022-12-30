@@ -18,10 +18,6 @@ public class SpawnCommand implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (!sender.hasPermission("fullwin.spawn")) {
-            sender.sendMessage("Unknown command. Type \"/help\" for help.");
-            return true;
-        }
         Player player = args.length == 0 ? (Player) sender : Bukkit.getPlayer(args[0]);
 
         if (player == null) {
