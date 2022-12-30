@@ -3,7 +3,6 @@ package gg.fullwin.betterclear.stats;
 import gg.fullwin.betterclear.util.CC;
 import gg.fullwin.betterclear.util.UnicodeUtil;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;

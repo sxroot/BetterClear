@@ -79,16 +79,27 @@ public final class LotsOfListeners implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onJoin(PlayerJoinEvent e) {
         Player player = e.getPlayer();
+        e.setJoinMessage(null);
+
         player.getInventory().clear();
         player.getActivePotionEffects().forEach(potionEffect -> player.removePotionEffect(potionEffect.getType()));
         player.removeMetadata("blacklivesmatter", JavaPlugin.getPlugin(BetterClear.class));
         player.removeMetadata("alllivesmatter", JavaPlugin.getPlugin(BetterClear.class));
-        e.getPlayer().setGameMode(GameMode.ADVENTURE);
-        e.setJoinMessage(null);
+        player.setGameMode(GameMode.ADVENTURE);
+        player.setHealth(20);
+        player.setFlying(false);
+        // clear chat
+        player.sendMessage("","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","");
+        // send motd
+        player.sendMessage("",
+                CC.translate(CC.FULLWIN + CC.BOLD + "ꜰᴜʟʟᴡɪɴ"),
+                CC.translate("&7ᴋɪᴛᴘᴠᴘ ᴅᴇᴠᴇʟᴏᴘᴍᴇɴᴛ sᴇʀᴠᴇʀ."),
+                ""
+        );
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void onJoin(PlayerQuitEvent e) {
+    public void onLeave(PlayerQuitEvent e) {
         e.setQuitMessage(null);
     }
 
