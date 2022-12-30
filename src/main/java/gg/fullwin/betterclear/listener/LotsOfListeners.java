@@ -32,8 +32,6 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.potion.PotionType;
 
-import java.sql.Array;
-import java.util.ArrayList;
 import java.util.List;
 
 import static gg.fullwin.betterclear.BetterClear.DECIMAL_FORMAT;
@@ -154,12 +152,12 @@ public final class LotsOfListeners implements Listener {
                 "is a unstoppable force with a"
         };
         String random = phrases[(int) (Math.random() * phrases.length)];
-
+        /*CC.FULLWIN + CC.BOLD + "KILLSTREAK" + "\n" +*/
         if (killer == null) return;
         statsRegistry.findByUid(killer.getUniqueId()).ifPresent(stats -> {
             for (int number : numbers) {
                 if (stats.killstreak() == number) {
-                    Bukkit.broadcastMessage(CC.translate("\n" + CC.FULLWIN + CC.BOLD + "KILLSTREAK" + "\n" + CC.PISS + killer.getName() + " " + random + " " + number + " killstreak." + "\n"));
+                    Bukkit.broadcastMessage(CC.translate("\n" + CC.FULLWIN + CC.BOLD + killer.getName()  + CC.PISS + " " + random + " " + CC.FULLWIN + CC.BOLD + number + CC.PISS + " killstreak." + "\n"));
                     for (Player players : Bukkit.getOnlinePlayers()) {
                         players.playSound(killer, Sound.ENTITY_PLAYER_LEVELUP, SoundCategory.MASTER, 1.0f, 1.0f);
                     }
