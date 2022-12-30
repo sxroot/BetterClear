@@ -158,9 +158,10 @@ public final class LotsOfListeners implements Listener {
             for (int number : numbers) {
                 if (stats.killstreak() == number) {
                     Bukkit.broadcastMessage(CC.translate("\n" + CC.FULLWIN + CC.BOLD + killer.getName()  + CC.PISS + " " + random + " " + CC.FULLWIN + CC.BOLD + number + CC.PISS + " killstreak." + "\n"));
-                    for (Player players : Bukkit.getOnlinePlayers()) {
+                    killer.playSound(killer, Sound.ENTITY_PLAYER_LEVELUP, SoundCategory.MASTER, 1.0f, 1.0f);
+/*                    for (Player players : Bukkit.getOnlinePlayers()) {
                         players.playSound(killer, Sound.ENTITY_PLAYER_LEVELUP, SoundCategory.MASTER, 1.0f, 1.0f);
-                    }
+                    }*/
                 }
             }
         });
