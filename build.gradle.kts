@@ -8,6 +8,7 @@ version = "1.0-SNAPSHOT"
 
 repositories {
     mavenCentral()
+    maven("https://nexus.sirblobman.xyz/repository/public/")
     maven("https://hub.spigotmc.org/nexus/content/repositories/snapshots/")
     maven("https://oss.sonatype.org/content/groups/public/")
     maven("https://repo.extendedclip.com/content/repositories/placeholderapi/")
@@ -16,6 +17,8 @@ repositories {
 dependencies {
     compileOnly("org.spigotmc:spigot-api:1.19.2-R0.1-SNAPSHOT")
     compileOnly("me.clip:placeholderapi:2.11.1")
+    compileOnly("com.github.sirblobman.api:core:2.6-SNAPSHOT")
+    compileOnly("com.github.sirblobman.combatlogx:api:11.0.0.0-SNAPSHOT")
     implementation("org.mongodb:mongo-java-driver:3.12.11")
     implementation("org.jetbrains:annotations:23.0.0")
 }

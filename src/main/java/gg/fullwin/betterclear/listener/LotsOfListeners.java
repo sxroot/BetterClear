@@ -119,7 +119,23 @@ public final class LotsOfListeners implements Listener {
         Player killer = e.getEntity().getKiller();
 
         List<Integer> numbers = List.of(5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 60, 70, 80, 90, 100, 120, 140, 160, 180, 200);
-        String[] phrases = {"is on a killing spree with a", "is dominating the battlefield with a", "is unstoppable with a", "is a force to be reckoned with on a", "is godlike on a", "is a true assassin with a", "is a killing machine with a", "is a master of the battlefield with a", "is a legend with a", "is on a rampage with a", "is a battlefield mastermind with a", "is a killing machine with an", "is a true master of the game with a", "is a living legend with a", "is a one-man army with a", "is a true monster on the battlefield with a", "is a absolute beast with a", "is a unstoppable force with a"};
+        String[] phrases = {"is on a killing spree with a",
+                "is dominating the battlefield with a",
+                "is unstoppable with a",
+                "is a force to be reckoned with on a",
+                "is godlike on a", "is a true assassin with a",
+                "is a killing machine with a",
+                "is a master of the battlefield with a",
+                "is a legend with a",
+                "is on a rampage with a",
+                "is a battlefield mastermind with a",
+                "is a killing machine with an",
+                "is a true master of the game with a",
+                "is a living legend with a",
+                "is a one-man army with a",
+                "is a true monster on the battlefield with a",
+                "is a absolute beast with a",
+                "is a unstoppable force with a"};
         String random = phrases[(int) (Math.random() * phrases.length)];
 
         if (killer == null) return;

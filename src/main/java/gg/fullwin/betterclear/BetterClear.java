@@ -32,6 +32,7 @@ public final class BetterClear extends JavaPlugin {
         Kit.load();
 
         StatsRegistry statsRegistry = new StatsRegistry();
+        CombatLog combatLog = new CombatLog();
 
         // regitster commands
         Objects.requireNonNull(getCommand("clear")).setExecutor(new ClearCommand());
@@ -39,13 +40,14 @@ public final class BetterClear extends JavaPlugin {
         Objects.requireNonNull(getCommand("strength")).setExecutor(new StrengthCommand());
         Objects.requireNonNull(getCommand("tpkits")).setExecutor(new TPKitSelectCommand());
         Objects.requireNonNull(getCommand("build")).setExecutor(new BuildCommand());
+        Objects.requireNonNull(getCommand("spawn")).setExecutor(new SpawnCommand(combatLog));
 
         // kit commnds
         Objects.requireNonNull(getCommand("kit")).setExecutor(new KitCommand());
 
         // register listeners
         Objects.requireNonNull(getCommand("stats")).setExecutor(new StatsCommand(statsRegistry));
-        getServer().getPluginManager().registerEvents(new LotsOfListeners(), this);
+        getServer().getPluginManager().registerEvents(new LotsOfListeners(statsRegistry), this);
         getServer().getPluginManager().registerEvents(new StatsListener(statsRegistry), this);
 
         new StatsExpansion(statsRegistry).register();

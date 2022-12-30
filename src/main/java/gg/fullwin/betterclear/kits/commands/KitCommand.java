@@ -3,6 +3,8 @@ package gg.fullwin.betterclear.kits.commands;
 import gg.fullwin.betterclear.kits.Kit;
 import gg.fullwin.betterclear.util.CC;
 import gg.fullwin.betterclear.util.UnicodeUtil;
+import gg.fullwin.betterclear.util.player.PlayerState;
+import gg.fullwin.betterclear.util.player.Profile;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -99,6 +101,9 @@ public final class KitCommand implements CommandExecutor {
                     return false;
                 }
 
+                Profile profile = Profile.getByUuid(target.getUniqueId());
+
+                profile.setState(PlayerState.Fighting);
                 target.getInventory().setContents(kit.loadout());
                 target.getInventory().setArmorContents(kit.armourLoadout());
                 target.updateInventory();

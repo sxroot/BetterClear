@@ -21,3 +21,5 @@ commands:
   build:
     permission: "fullwin.build"
     description: "builder mode"
+  spawn:
+    description: "TAKE UR MOM TO SPAWN"
