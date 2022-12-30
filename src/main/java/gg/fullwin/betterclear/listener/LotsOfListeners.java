@@ -111,29 +111,20 @@ public final class LotsOfListeners implements Listener {
         Player killer = e.getEntity().getKiller();
 
         List<Integer> numbers = List.of(5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 60, 70, 80, 90, 100, 120, 140, 160, 180, 200);
-        List<String> phrases = List.of("is on a killing spree with a", "is dominating the battlefield with a", "is unstoppable with a", "is a force to be reckoned with on a", "is godlike on a", "is a true assassin with a", "is a killing machine with a", "is a master of the battlefield with a", "is a legend with a", "is on a rampage with a", "is a battlefield mastermind with a", "is a killing machine with an", "is a true master of the game with a", "is a living legend with a", "is a one-man army with a", "is a true monster on the battlefield with a", "is a absolute beast with a", "is a unstoppable force with a");
+        String[] phrases = {"is on a killing spree with a", "is dominating the battlefield with a", "is unstoppable with a", "is a force to be reckoned with on a", "is godlike on a", "is a true assassin with a", "is a killing machine with a", "is a master of the battlefield with a", "is a legend with a", "is on a rampage with a", "is a battlefield mastermind with a", "is a killing machine with an", "is a true master of the game with a", "is a living legend with a", "is a one-man army with a", "is a true monster on the battlefield with a", "is a absolute beast with a", "is a unstoppable force with a"};
+        String random = phrases[(int) (Math.random() * phrases.length)];
 
         if (killer == null) return;
         statsRegistry.findByUid(killer.getUniqueId()).ifPresent(stats -> {
             for (int number : numbers) {
                 if (stats.killstreak() == number) {
-                    for (String phrase : phrases) {
-                        Bukkit.broadcastMessage(CC.translate("\n" + CC.FULLWIN + CC.BOLD + "KILLSTREAK" + "\n" + CC.PISS + killer.getName() + " " + phrase + number + " killstreak!" + "\n"));
-                        for (Player players : Bukkit.getOnlinePlayers()) {
-                            players.playSound(killer, Sound.ENTITY_PLAYER_LEVELUP, SoundCategory.MASTER, 1.0f, 1.0f);
-                        }
+                    Bukkit.broadcastMessage(CC.translate("\n" + CC.FULLWIN + CC.BOLD + "KILLSTREAK" + "\n" + CC.PISS + killer.getName() + " " + random + " " + number + " killstreak." + "\n"));
+                    for (Player players : Bukkit.getOnlinePlayers()) {
+                        players.playSound(killer, Sound.ENTITY_PLAYER_LEVELUP, SoundCategory.MASTER, 1.0f, 1.0f);
                     }
                 }
             }
-
-            // idk if this will work
-            for (int number : numbers) {
-                if (killer.isDead() && stats.killstreak() > number) {
-                    Bukkit.broadcastMessage(CC.translate("\nbruhhhh homie lost his killstreak LMFAOOOOO\n"));
-                }
-            }
         });
-
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
