@@ -80,7 +80,8 @@ public final class LotsOfListeners implements Listener {
     public void onJoin(PlayerJoinEvent e) {
         Player player = e.getPlayer();
         e.setJoinMessage(null);
-
+        Location destination = new Location(player.getWorld(), -1004.5, 269.5, 0.5, (float) 225.098, (float) 0.379);
+        player.teleport(destination);
         player.getInventory().clear();
         player.getActivePotionEffects().forEach(potionEffect -> player.removePotionEffect(potionEffect.getType()));
         player.removeMetadata("blacklivesmatter", JavaPlugin.getPlugin(BetterClear.class));
