@@ -66,10 +66,7 @@ public final class LotsOfListeners implements Listener {
                 killer.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 40 * 20, 1));
             if (killer.hasMetadata("alllivesmatter"))
                 killer.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 40 * 20, 0));
-            e.setDeathMessage(
-                    CC.PISS + player.getName() + CC.GRAY + " has been killed by " + CC.PISS + killer.getName() +
-                            ChatColor.GRAY + " with " + CC.FULLWIN + DECIMAL_FORMAT.format(killer.getHealth() / 2) + " \u2764");
-            /*Math.round(killer.getHealth() / 2) + " \u2764");*/
+            e.setDeathMessage(CC.PISS + player.getName() + CC.GRAY + " has been killed by " + CC.PISS + killer.getName() + ChatColor.GRAY + " with " + CC.FULLWIN + DECIMAL_FORMAT.format(killer.getHealth() / 2) + " \u2764");
             String message = CC.translate("&cʀᴇᴄᴇɪᴠᴇᴅ ᴀ ʜᴇᴀʟ ꜰᴏʀ ᴋɪʟʟɪɴɢ " + UnicodeUtil.parse(player.getName()));
             killer.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(message));
             killer.setHealth(20);
