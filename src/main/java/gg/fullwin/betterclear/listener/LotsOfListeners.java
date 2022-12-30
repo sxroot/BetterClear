@@ -1,12 +1,15 @@
 package gg.fullwin.betterclear.listener;
 
 import gg.fullwin.betterclear.BetterClear;
+import gg.fullwin.betterclear.stats.Stats;
+import gg.fullwin.betterclear.stats.StatsRegistry;
 import gg.fullwin.betterclear.util.CC;
 import gg.fullwin.betterclear.util.UnicodeUtil;
 import org.bukkit.*;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.FallingBlock;
 import org.bukkit.entity.Player;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.ItemFrame;
@@ -15,6 +18,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockPhysicsEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.*;
 import org.bukkit.event.player.*;
@@ -28,7 +32,20 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.potion.PotionType;
 
+import java.sql.Array;
+import java.util.ArrayList;
+import java.util.List;
+
+import static gg.fullwin.betterclear.BetterClear.DECIMAL_FORMAT;
+
 public final class LotsOfListeners implements Listener {
+
+    private final StatsRegistry statsRegistry;
+
+    public LotsOfListeners(StatsRegistry statsRegistry) {
+        this.statsRegistry = statsRegistry;
+    }
+
     @EventHandler(priority = EventPriority.HIGHEST)
     public void lolMOTD(ServerListPingEvent e) {
         final String line1 = "\u00A76\u00A7lꜰᴜʟʟᴡɪɴ \u00A7eᴇᴜ \u00A7f\u00A7k: \u00A7r\u00A77[1.16 - 1.19]";
@@ -49,7 +66,10 @@ public final class LotsOfListeners implements Listener {
                 killer.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 40 * 20, 1));
             if (killer.hasMetadata("alllivesmatter"))
                 killer.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 40 * 20, 0));
-            e.setDeathMessage(CC.PISS + killer.getName() + CC.GRAY + " killed " + CC.PISS + player.getName() + ChatColor.GRAY + " with " + CC.FULLWIN + Math.round(killer.getHealth() / 2) + " \u2764");
+            e.setDeathMessage(
+                    CC.PISS + player.getName() + CC.GRAY + " has been killed by " + CC.PISS + killer.getName() +
+                            ChatColor.GRAY + " with " + CC.FULLWIN + DECIMAL_FORMAT.format(killer.getHealth() / 2) + " \u2764");
+            /*Math.round(killer.getHealth() / 2) + " \u2764");*/
             String message = CC.translate("&cʀᴇᴄᴇɪᴠᴇᴅ ᴀ ʜᴇᴀʟ ꜰᴏʀ ᴋɪʟʟɪɴɢ " + UnicodeUtil.parse(player.getName()));
             killer.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(message));
             killer.setHealth(20);
@@ -79,6 +99,42 @@ public final class LotsOfListeners implements Listener {
     public void onPlayerChat(AsyncPlayerChatEvent e) {
         e.setFormat("<" + UnicodeUtil.parse(e.getPlayer().getName()) + "> " + e.getMessage());
     }*/
+
+    // this is dangerous ik but purely for building purposes :D
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void noGay(BlockPhysicsEvent e) {
+        e.setCancelled(true);
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void lolKillstreak(EntityDeathEvent e) {
+        Player killer = e.getEntity().getKiller();
+
+        List<Integer> numbers = List.of(5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 60, 70, 80, 90, 100, 120, 140, 160, 180, 200);
+        List<String> phrases = List.of("is on a killing spree with a", "is dominating the battlefield with a", "is unstoppable with a", "is a force to be reckoned with on a", "is godlike on a", "is a true assassin with a", "is a killing machine with a", "is a master of the battlefield with a", "is a legend with a", "is on a rampage with a", "is a battlefield mastermind with a", "is a killing machine with an", "is a true master of the game with a", "is a living legend with a", "is a one-man army with a", "is a true monster on the battlefield with a", "is a absolute beast with a", "is a unstoppable force with a");
+
+        if (killer == null) return;
+        statsRegistry.findByUid(killer.getUniqueId()).ifPresent(stats -> {
+            for (int number : numbers) {
+                if (stats.killstreak() == number) {
+                    for (String phrase : phrases) {
+                        Bukkit.broadcastMessage(CC.translate("\n" + CC.FULLWIN + CC.BOLD + "KILLSTREAK" + "\n" + CC.PISS + killer.getName() + " " + phrase + number + " killstreak!" + "\n"));
+                        for (Player players : Bukkit.getOnlinePlayers()) {
+                            players.playSound(killer, Sound.ENTITY_PLAYER_LEVELUP, SoundCategory.MASTER, 1.0f, 1.0f);
+                        }
+                    }
+                }
+            }
+
+            // idk if this will work
+            for (int number : numbers) {
+                if (killer.isDead() && stats.killstreak() > number) {
+                    Bukkit.broadcastMessage(CC.translate("\nbruhhhh homie lost his killstreak LMFAOOOOO\n"));
+                }
+            }
+        });
+
+    }
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onEpicStuff(PlayerInteractEvent e) {
